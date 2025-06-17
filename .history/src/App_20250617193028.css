@@ -1,0 +1,191 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #e0e7ff, #f3e8ff);
+  min-height: 100vh;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+form input:focus {
+  border-color: #6366f1; /* Indigo */
+  outline: none;
+}
+
+form button,
+.form-container button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #6366f1; /* Indigo */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+form button:hover,
+.form-container button:hover {
+  background-color: #4f46e5; /* Darker Indigo */
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #4f46e5;
+}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  background: linear-gradient(to bottom right, #3e62db, #f3e8ff);
+}
+
+.welcome-root {
+  font-family: 'Manrope', 'Noto Sans', sans-serif;
+  background: linear-gradient(to bottom right, #f8f9fc, #eef1f7);
+  color: #111418;
+}
+
+.welcome-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  border-bottom: 1px solid #f0f2f5;
+  background-color: white;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-links, .nav-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-links a, .footer a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #111418;
+}
+
+.nav-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-actions button:first-child {
+  background: #0c7ff2;
+  color: white;
+}
+
+.nav-actions button:last-child {
+  background: #f0f2f5;
+  color: #111418;
+}
+
+.welcome-hero {
+  background: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAirNjkY...') center/cover no-repeat;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: white;
+  background-blend-mode: overlay;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.welcome-hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.hero-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-actions button {
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.hero-actions button:first-child {
+  background-color: #0c7ff2;
+  color: white;
+}
+
+.hero-actions button:last-child {
+  background-color: #f0f2f5;
+  color: #111418;
+}
+
+.features {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.feature-cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #dbe0e6;
+  max-width: 300px;
+  text-align: left;
+  text-align: center;
+
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #60758a;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1re
+}
