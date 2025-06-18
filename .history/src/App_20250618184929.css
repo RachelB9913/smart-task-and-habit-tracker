@@ -93,24 +93,27 @@ h2 {
   cursor: pointer;
 }
 
-/* top buttons */
+
+
+/* login top */
 .nav-actions button:first-child { 
   background: #0c7ff2;
   color: white;
 }
 
 .nav-actions button:first-child:hover {
-  background: #0361bf; /* new hover color */
+  background: #005bb5; /* new hover color */
   color: #e3e3e3;      /* optional: change text color on hover */
 }
 
+/* sign up top */
 .nav-actions button:last-child {
   background: #f0f2f5;
   color: #111418;
 }
 
 .nav-actions button:last-child:hover {
-  background: #b5b8bd; /* new hover color */
+  background: #d1d5db; /* new hover color */
   color: #0c7ff2;      /* optional: change text color on hover */
 }
 
@@ -141,27 +144,14 @@ h2 {
   cursor: pointer;
 }
 
-/* center buttons */
 .hero-actions button:first-child {
   background-color: #0c7ff2;
   color: white;
 }
 
-.hero-actions button:first-child:hover {
-  background-color: #0c7ff2;
-  color: white;
-  border: #0d1101 1px solid;
-}
-
 .hero-actions button:last-child {
   background-color: #f0f2f5;
-  color: #111418; 
-}
-
-.hero-actions button:last-child:hover {
-  background-color: #f0f2f5;
   color: #111418;
-  border: #0d1101 1px solid;
 }
 
 .features {

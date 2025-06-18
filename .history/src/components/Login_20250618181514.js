@@ -47,25 +47,21 @@ export default function Login() {
     };
 
     return (
-    <div className="login-background">
-        <PageWrapper direction="left">
-            <div className="form-container">
-                <form onSubmit={handleSubmit}>            
-                    <h2>Login</h2>
-                    <input name="username" placeholder='Username' onChange={handleChange} required />
-                    <input type="password" name="password" placeholder='Password' onChange={handleChange} required />
-                    <div className="button-group">
-                        <button type="submit">Login</button>
-                        <button
-                            onClick={() => navigate('/')}
-                            className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200" >
-                            back to Welcome
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </PageWrapper>
-    </div>            
+    <PageWrapper direction="left">
+        <div className="form-container">
+            <form onSubmit={handleSubmit}>            
+                <h2>Login</h2>
+                <input name="username" placeholder='Username' onChange={handleChange} required />
+                <input type="password" name="password" placeholder='Password' onChange={handleChange} required />
+                <button type="submit">Login</button>
+                <button
+                    onClick={() => navigate('/')}
+                    className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200" >
+                    back to Welcome
+                </button>
+            </form>
+        </div>
+    </PageWrapper>
     );
 }
 

@@ -48,15 +48,9 @@
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
+  cursor: wait;
 }
 
 .dashboard-header button:hover {
   background-color: #ad2626;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Adjust the space between buttons */
 }

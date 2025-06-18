@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageWrapper from './PageWrapper';
 import './Auth.css';
@@ -43,49 +43,45 @@ export default function Register() {
   };
 
   return (
-    <div className="register-background">
-      <PageWrapper direction="right">
-        <div className="form-container">
-          <form onSubmit={handleSubmit}>
-            <h2>Register</h2>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <div className="button-group">
-              <button type="submit">Sign up</button>
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200"
-              >
-                ← Back to Welcome
-              </button>
-            </div>
-          </form>
-        </div>
-      </PageWrapper>
-    </div>
+    <PageWrapper direction="right">
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <h2>Register</h2>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Sign up</button>
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200"
+          >
+            ← Back to Welcome
+          </button>
+        </form>
+      </div>
+    </PageWrapper>
   );
 }
 

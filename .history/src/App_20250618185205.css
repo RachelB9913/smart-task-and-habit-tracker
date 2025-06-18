@@ -93,7 +93,7 @@ h2 {
   cursor: pointer;
 }
 
-/* top buttons */
+/* login top */
 .nav-actions button:first-child { 
   background: #0c7ff2;
   color: white;
@@ -104,6 +104,7 @@ h2 {
   color: #e3e3e3;      /* optional: change text color on hover */
 }
 
+/* sign up top */
 .nav-actions button:last-child {
   background: #f0f2f5;
   color: #111418;
@@ -141,27 +142,24 @@ h2 {
   cursor: pointer;
 }
 
-/* center buttons */
 .hero-actions button:first-child {
   background-color: #0c7ff2;
   color: white;
 }
 
 .hero-actions button:first-child:hover {
-  background-color: #0c7ff2;
+  background-color: #413fa9;
   color: white;
-  border: #0d1101 1px solid;
 }
 
 .hero-actions button:last-child {
   background-color: #f0f2f5;
-  color: #111418; 
+  color: #111418;
 }
 
 .hero-actions button:last-child:hover {
-  background-color: #f0f2f5;
+  background-color: #f0f2f59e;
   color: #111418;
-  border: #0d1101 1px solid;
 }
 
 .features {

@@ -72,16 +72,14 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-            <div className="button-group">
-              <button type="submit">Sign up</button>
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200"
-              >
-                ← Back to Welcome
-              </button>
-            </div>
+            <button type="submit">Sign up</button>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition duration-200"
+            >
+              ← Back to Welcome
+            </button>
           </form>
         </div>
       </PageWrapper>

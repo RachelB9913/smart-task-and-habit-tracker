@@ -30,8 +30,8 @@ export default function Welcome() {
         <h1>Organize your life with TaskMaster</h1>
         <p>Smart task and habit tracker to help you achieve your goals. Sign up today.</p>
         <div className="hero-actions">
-          <button onClick={() => navigate('/login')}>Login</button>
           <button onClick={() => navigate('/register')}>Sign up</button>
+          <button onClick={() => navigate('/login')}>Login</button>
         </div>
       </section>
 
