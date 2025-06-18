@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.dto.AuthRequest;
 
-@CrossOrigin(origins = "http://localhost:3000")  // this line is essential
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -32,11 +33,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User loginData) {
-        User user = userRepository.findByUsername(loginData.getUsername());
-        if (user == null || !passwordEncoder.matches(loginData.getPassword(), user.getPassword())) {
+    public ResponseEntity<String> login(@RequestBody AuthRequest loginData) {
+        String identifier = loginData.getIdentifier();
+        String password = loginData.getPassword();
+
+        System.out.println("Identifier: " + loginData.getIdentifier());
+        System.out.println("UserName: " + loginData.getIdentifier());
+        User user = userRepository.findByUsername(identifier);
+
+        if (user == null) {
+            user = userRepository.findByEmail(identifier);
+        }
+
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
+
         return ResponseEntity.ok("Login successful");
     }
 }

@@ -20,7 +20,7 @@
 // export default App;
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Welcome from './components/welcome';
+import Welcome from './components/Welcome';
 import Login from './components/Login';
 import Register from './components/Register';
 
@@ -36,5 +36,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;
