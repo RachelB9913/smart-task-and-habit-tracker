@@ -17,7 +17,6 @@ public class HabitMapper {
 
     public static Habit fromDto(HabitDTO dto) {
         Habit habit = new Habit();
-        habit.setId(dto.getId());
         habit.setTitle(dto.getTitle());
         habit.setFrequency(dto.getFrequency());
         habit.setProgress(dto.getProgress());

@@ -51,6 +51,12 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDTO(user));
     }
 
+    // POST /api/users
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
     // DELETE /api/users/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
@@ -64,12 +70,11 @@ public class UserController {
 
     // PUT /api/users/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         if (userRepository.existsById(id)) {
             user.setId(id);
             User updatedUser = userRepository.save(user);
-            UserDTO dto = UserMapper.toDTO(updatedUser);
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(updatedUser);
         } else {
             return ResponseEntity.notFound().build();
         }

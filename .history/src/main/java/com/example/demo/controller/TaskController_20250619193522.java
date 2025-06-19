@@ -45,7 +45,6 @@ public class TaskController {
     public List<TaskDTO> getTasksByUser(@PathVariable Long userId) {
         return taskRepository.findByUserId(userId).stream()
             .map(task -> new TaskDTO(
-                task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getPriority(),

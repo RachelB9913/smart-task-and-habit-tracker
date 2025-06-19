@@ -4,7 +4,6 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Habit;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
-import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +47,20 @@ public class UserController {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(UserMapper.toDTO(user));
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setTaskIds(user.getTasks().stream().map(Task::getId).collect(Collectors.toList()));
+        dto.setHabitIds(user.getHabits().stream().map(Habit::getId).collect(Collectors.toList()));
+
+        return ResponseEntity.ok(dto);
+    }
+
+    // POST /api/users
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
     }
 
     // DELETE /api/users/{id}
@@ -64,12 +76,11 @@ public class UserController {
 
     // PUT /api/users/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         if (userRepository.existsById(id)) {
             user.setId(id);
             User updatedUser = userRepository.save(user);
-            UserDTO dto = UserMapper.toDTO(updatedUser);
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(updatedUser);
         } else {
             return ResponseEntity.notFound().build();
         }
