@@ -6,7 +6,6 @@ import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,14 +22,17 @@ public class TaskController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task saved = taskRepository.save(task);
-        return ResponseEntity.ok(saved);
-    }
+    public Task createTask(@RequestBody TaskDTO dto) {
+        System.out.println("✅ TaskController POST hit");
+        Task task = new Task();
+        task.setTitle(dto.getTitle());
+        task.setDescription(dto.getDescription());
+        task.setDueDate(dto.getDueDate());
+        task.setCompleted(dto.isCompleted());
 
-    @GetMapping
-    public ResponseEntity<List<Task>> getAllTasks() {
-        return ResponseEntity.ok(taskRepository.findAll());
+        userRepository.findById(dto.getUserId()).ifPresent(task::setUser);
+
+        return taskRepository.save(task);
     }
 
     @GetMapping("/user/{userId}")
