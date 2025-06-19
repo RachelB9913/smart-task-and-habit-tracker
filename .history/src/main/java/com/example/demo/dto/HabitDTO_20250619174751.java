@@ -10,8 +10,7 @@ public class HabitDTO {
 
     public HabitDTO() {}
 
-    public HabitDTO(Long id, String title, String frequency, int progress, Long userId, String description) {
-        this.id = id;
+    public HabitDTO(String title, String frequency, int progress, Long userId, String description) {
         this.title = title;
         this.frequency = frequency;
         this.progress = progress;

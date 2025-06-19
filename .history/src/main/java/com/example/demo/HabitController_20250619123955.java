@@ -6,10 +6,6 @@ import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-
-import com.example.demo.entity.User;
-import com.example.demo.mapper.HabitMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +26,9 @@ public class HabitController {
     }
 
     @PostMapping
-    public HabitDTO createHabit(@RequestBody HabitDTO dto) {
+    public Habit createHabit(@RequestBody HabitDTO dto) {
         System.out.println("✅ HabitController POST hit");
-
         Habit habit = new Habit();
-        habit.setId(dto.getId()); // Assuming id is optional and can be set
         habit.setTitle(dto.getTitle());
         habit.setFrequency(dto.getFrequency());
         habit.setProgress(dto.getProgress());
@@ -42,16 +36,7 @@ public class HabitController {
 
         userRepository.findById(dto.getUserId()).ifPresent(habit::setUser);
 
-        Habit saved = habitRepository.save(habit);
-
-        return new HabitDTO(
-            saved.getId(),
-            saved.getTitle(),
-            saved.getFrequency(),
-            saved.getProgress(),
-            saved.getUser().getId(),
-            saved.getDescription()
-        );
+        return habitRepository.save(habit);
     }
 
     @GetMapping("/user/{userId}")
@@ -59,37 +44,11 @@ public class HabitController {
         System.out.println("✅ HabitController GET hit");
         return habitRepository.findByUserId(userId).stream()
             .map(habit -> new HabitDTO(
-                habit.getId(),
                 habit.getTitle(),
                 habit.getFrequency(),
                 habit.getProgress(),
                 habit.getUser().getId(),
                 habit.getDescription()
             )).collect(Collectors.toList());
-    }
-
-    @PostMapping("/users/{userId}/habits")
-    public HabitDTO createHabitForUser(@PathVariable Long userId, @RequestBody Habit habit) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        habit.setUser(user);
-        Habit saved = habitRepository.save(habit);
-
-        return new HabitDTO(
-            saved.getId(),
-            saved.getTitle(),
-            saved.getFrequency(),
-            saved.getProgress(),
-            saved.getUser().getId(),
-            saved.getDescription()
-        );
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
-        Habit habit = habitRepository.findById(id).orElseThrow(() -> new RuntimeException("Habit not found"));
-        HabitDTO dto = HabitMapper.toDto(habit);
-        return ResponseEntity.ok(dto);
     }
 }

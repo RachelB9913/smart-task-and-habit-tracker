@@ -2,37 +2,40 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "habits")
-public class Habit {
-
+@Table(name = "tasks")
+public class Task {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String description;
-    private String frequency;   // DAILY or WEEKLY
-    private String dayOfWeek;   // MONDAY, etc. (optional if DAILY)
-    private LocalTime timeOfDay;
+    private String priority;
+    private LocalDateTime dueDate;
+    private String status;
     private LocalDateTime createdAt = LocalDateTime.now();
-    private int progress = 0; // Progress tracking, e.g., number of completions
+    private boolean isCompleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     // Constructors, Getters, and Setters
-    public Habit() {
+    public Task() {
     }
-    public Habit(String title, String description, String frequency, String dayOfWeek, LocalTime timeOfDay, User user) {
+
+    public Task(String title, String description, String priority, LocalDateTime dueDate, String status, User user) {
         this.title = title;
         this.description = description;
-        this.frequency = frequency;
-        this.dayOfWeek = dayOfWeek;
-        this.timeOfDay = timeOfDay;
+        this.priority = priority;
+        this.dueDate = dueDate;
+        this.status = status;
         this.user = user;
     }
 
@@ -54,23 +57,23 @@ public class Habit {
     public void setDescription(String description) {
         this.description = description;
     }
-    public String getFrequency() {
-        return frequency;
+    public String getPriority() {
+        return priority;
     }
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
-    public String getDayOfWeek() {
-        return dayOfWeek;
+    public LocalDateTime getDueDate() {
+        return dueDate;
     }
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
     }
-    public LocalTime getTimeOfDay() {
-        return timeOfDay;
+    public String getStatus() {
+        return status;
     }
-    public void setTimeOfDay(LocalTime timeOfDay) {
-        this.timeOfDay = timeOfDay;
+    public void setStatus(String status) {
+        this.status = status;
     }
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -84,10 +87,10 @@ public class Habit {
     public void setUser(User user) {
         this.user = user;
     }
-    public int getProgress() {
-        return progress;
+    public boolean isCompleted() {
+        return isCompleted;
     }
-    public void setProgress(int progress) {
-        this.progress = progress;
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }

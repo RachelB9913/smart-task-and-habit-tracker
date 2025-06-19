@@ -5,7 +5,6 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.mapper.TaskMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,12 +50,5 @@ public class TaskController {
                 task.getStatus(),
                 task.getUser().getId()
             )).collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
-        TaskDTO dto = TaskMapper.toDto(task);
-        return ResponseEntity.ok(dto);
     }
 }

@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.TaskDTO;
 import com.example.demo.entity.Task;
-import com.example.demo.entity.User;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.mapper.TaskMapper;
-
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.entity.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,37 +24,42 @@ public class TaskController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody TaskDTO dto) {
-        Task task = new Task();
-        task.setTitle(dto.getTitle());
-        task.setDescription(dto.getDescription());
-        task.setPriority(dto.getPriority());
-        task.setStatus(dto.getStatus());
-
-        User user = userRepository.findById(dto.getUserId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        task.setUser(user);
-
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
         Task saved = taskRepository.save(task);
         return ResponseEntity.ok(saved);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Task>> getAllTasks() {
+        return ResponseEntity.ok(taskRepository.findAll());
+    }
+
     @GetMapping("/user/{userId}")
     public List<TaskDTO> getTasksByUser(@PathVariable Long userId) {
+        System.out.println("✅ TaskController GET hit");
         return taskRepository.findByUserId(userId).stream()
             .map(task -> new TaskDTO(
                 task.getTitle(),
                 task.getDescription(),
-                task.getPriority(),
-                task.getStatus(),
+                task.getDueDate(),
+                task.isCompleted(),
                 task.getUser().getId()
             )).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
-        TaskDTO dto = TaskMapper.toDto(task);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/users/{userId}/tasks")
+    public ResponseEntity<List<Task>> getTasksForUser(@PathVariable Long userId) {
+        List<Task> tasks = taskRepository.findByUserId(userId);
+        return ResponseEntity.ok(tasks);
     }
+    
+    @PostMapping("/users/{userId}/tasks")
+    public ResponseEntity<Task> createTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
+        User user = (User) userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        task.setUser(user);
+        Task savedTask = taskRepository.save(task);
+        return ResponseEntity.ok(savedTask);
+    }
+
+    
 }

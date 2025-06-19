@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 public class HabitDTO {
-    private Long id; // Optional, if you want to return the ID after creation
     private String title;
     private String frequency; // always String
     private int progress;
@@ -10,8 +9,7 @@ public class HabitDTO {
 
     public HabitDTO() {}
 
-    public HabitDTO(Long id, String title, String frequency, int progress, Long userId, String description) {
-        this.id = id;
+    public HabitDTO(String title, String frequency, int progress, Long userId, String description) {
         this.title = title;
         this.frequency = frequency;
         this.progress = progress;

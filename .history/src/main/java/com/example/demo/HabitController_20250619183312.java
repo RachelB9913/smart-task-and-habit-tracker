@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import com.example.demo.entity.User;
-import com.example.demo.mapper.HabitMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,7 +88,7 @@ public class HabitController {
     @GetMapping("/{id}")
     public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
         Habit habit = habitRepository.findById(id).orElseThrow(() -> new RuntimeException("Habit not found"));
-        HabitDTO dto = HabitMapper.toDto(habit);
+        HabitDTO dto = habitMapper.toDTO(habit);
         return ResponseEntity.ok(dto);
     }
 }

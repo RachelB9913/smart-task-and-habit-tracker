@@ -22,10 +22,7 @@ public class SecurityConfig {
                 "/api/users/**",
                 "/api/users/*/habits",
                 "/api/habits",
-                "/api/habits/**",
-                "/api/users/*/tasks",
-                "/api/tasks",
-                "/api/tasks/**"
+                "/api/habits/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

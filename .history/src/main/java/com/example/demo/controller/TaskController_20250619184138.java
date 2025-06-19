@@ -56,7 +56,7 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
-        TaskDTO dto = TaskMapper.toDto(task);
+        TaskDTO dto = TaskMapper.toDTO(task);
         return ResponseEntity.ok(dto);
     }
 }

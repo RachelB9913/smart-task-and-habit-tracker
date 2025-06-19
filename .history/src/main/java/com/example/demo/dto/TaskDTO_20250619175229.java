@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import java.time.LocalDateTime;
+
 public class TaskDTO {
     private String title;
     private String description;
@@ -31,7 +33,7 @@ public class TaskDTO {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-
+    
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 }

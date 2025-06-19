@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,16 +16,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-    "/hello",
-                "/api/auth/**",
-                "/api/users",
-                "/api/users/**",
-                "/api/users/*/habits",
-                "/api/habits",
-                "/api/habits/**",
-                "/api/users/*/tasks",
-                "/api/tasks",
-                "/api/tasks/**"
+                    "/hello",
+                    "/api/auth/**",
+                    "/api/users",
+                    "/api/users/**",           // includes GET, DELETE, etc.
+                    "/api/habits",
+                    "/api/habits/**",          // for specific habit operations
+                    "/api/tasks",
+                    "/api/tasks/**"            // allow all task operations
                 ).permitAll()
                 .anyRequest().authenticated()
             )

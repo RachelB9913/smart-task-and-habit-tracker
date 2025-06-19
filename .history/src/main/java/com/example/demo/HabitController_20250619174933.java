@@ -7,9 +7,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import com.example.demo.entity.User;
-import com.example.demo.mapper.HabitMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +57,6 @@ public class HabitController {
         System.out.println("✅ HabitController GET hit");
         return habitRepository.findByUserId(userId).stream()
             .map(habit -> new HabitDTO(
-                habit.getId(),
                 habit.getTitle(),
                 habit.getFrequency(),
                 habit.getProgress(),
@@ -84,12 +81,5 @@ public class HabitController {
             saved.getUser().getId(),
             saved.getDescription()
         );
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
-        Habit habit = habitRepository.findById(id).orElseThrow(() -> new RuntimeException("Habit not found"));
-        HabitDTO dto = HabitMapper.toDto(habit);
-        return ResponseEntity.ok(dto);
     }
 }

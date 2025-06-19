@@ -2,10 +2,10 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
@@ -16,20 +16,15 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-    "/hello",
-                "/api/auth/**",
-                "/api/users",
-                "/api/users/**",
-                "/api/users/*/habits",
-                "/api/habits",
-                "/api/habits/**",
-                "/api/users/*/tasks",
-                "/api/tasks",
-                "/api/tasks/**"
+                    "/hello",
+                    "/api/auth/**",
+                    "/api/users",
+                    "/api/habits/**",      // ✅ allow habits
+                    "/api/tasks/**"        // ✅ allow tasks
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(); // Optional: allows Postman to authenticate easily
+            .httpBasic(); // Optional for testing via Postman
         return http.build();
     }
 
@@ -38,3 +33,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+

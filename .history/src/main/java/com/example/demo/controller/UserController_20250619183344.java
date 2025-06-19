@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserDTO;
-import com.example.demo.entity.Habit;
-import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,23 +18,8 @@ public class UserController {
 
     // GET /api/users
     @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> {
-            UserDTO dto = new UserDTO();
-            dto.setId(user.getId());
-            dto.setUsername(user.getUsername());
-            dto.setEmail(user.getEmail());
-
-            dto.setTaskIds(user.getTasks().stream()
-                .map(Task::getId)
-                .collect(Collectors.toList()));
-
-            dto.setHabitIds(user.getHabits().stream()
-                .map(Habit::getId)
-                .collect(Collectors.toList()));
-
-            return dto;
-        }).collect(Collectors.toList());
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     // GET /api/users/{id}
