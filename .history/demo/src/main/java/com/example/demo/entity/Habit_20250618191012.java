@@ -25,7 +25,7 @@ public class Habit {
     private User user;
 
     // Constructors, Getters, and Setters
-    public Habit() {
+    Habit() {
     }
     public Habit(String title, String description, String frequency, String dayOfWeek, LocalTime timeOfDay, User user) {
         this.title = title;
