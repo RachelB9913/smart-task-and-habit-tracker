@@ -275,7 +275,7 @@ export default function Dashboard() {
               <input type="text" placeholder="Description" value={newTask.description} onChange={e => setNewTask({ ...newTask, description: e.target.value })} />
               <input type="text" placeholder="Priority" value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} />
               <input type="text" placeholder="Status" value={newTask.status} onChange={e => setNewTask({ ...newTask, status: e.target.value })} />
-              <button onClick={handleAddTask} className="bg-toggle">{editingTaskId ? "Update Task" : "Add Task"}</button>
+              <button onClick={handleAddTask} className="bg-toggle">Add</button>
               <button onClick={() => setShowTaskForm(false)} className="logout-button">Close</button>
             </div>
           </div>

@@ -127,6 +127,6 @@ public class TaskController {
         existing.setDueDate(updatedTask.getDueDate());
 
         taskRepository.save(existing);
-        return ResponseEntity.ok(TaskMapper.toDto(existing));
+        return ResponseEntity.ok(TaskMapper.toDto(updatedTask));
     }
 }

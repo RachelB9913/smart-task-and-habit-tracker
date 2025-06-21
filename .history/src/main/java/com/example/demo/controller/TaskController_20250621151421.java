@@ -111,22 +111,4 @@ public class TaskController {
 
         return ResponseEntity.ok(TaskMapper.toDto(task));
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
-        Optional<Task> existingOpt = taskRepository.findById(id);
-        if (existingOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Task existing = existingOpt.get();
-        existing.setTitle(updatedTask.getTitle());
-        existing.setDescription(updatedTask.getDescription());
-        existing.setPriority(updatedTask.getPriority());
-        existing.setStatus(updatedTask.getStatus());
-        existing.setDueDate(updatedTask.getDueDate());
-
-        taskRepository.save(existing);
-        return ResponseEntity.ok(TaskMapper.toDto(existing));
-    }
 }

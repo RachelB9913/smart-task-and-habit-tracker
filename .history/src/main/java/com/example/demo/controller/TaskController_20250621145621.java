@@ -7,8 +7,6 @@ import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.mapper.TaskMapper;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -95,38 +93,5 @@ public class TaskController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<TaskDTO> updateTaskStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Task task = optionalTask.get();
-        String status = payload.get("status");
-        task.setStatus(status);
-        taskRepository.save(task);
-
-        return ResponseEntity.ok(TaskMapper.toDto(task));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
-        Optional<Task> existingOpt = taskRepository.findById(id);
-        if (existingOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Task existing = existingOpt.get();
-        existing.setTitle(updatedTask.getTitle());
-        existing.setDescription(updatedTask.getDescription());
-        existing.setPriority(updatedTask.getPriority());
-        existing.setStatus(updatedTask.getStatus());
-        existing.setDueDate(updatedTask.getDueDate());
-
-        taskRepository.save(existing);
-        return ResponseEntity.ok(TaskMapper.toDto(existing));
     }
 }

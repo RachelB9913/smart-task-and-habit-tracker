@@ -1,7 +1,6 @@
 // Dashboard.js
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "../Dashboard.css";
 
 export default function Dashboard() {
@@ -11,65 +10,15 @@ export default function Dashboard() {
   const [showHabits, setShowHabits] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [habits, setHabits] = useState([]);
-  const [editingTaskId, setEditingTaskId] = useState(null);
   const [background, setBackground] = useState("light");
 
   const [showTaskForm, setShowTaskForm] = useState(false);
-  const [newTask, setNewTask] = useState({ title: "", description: "", priority: "", status: ""});
+  const [newTask, setNewTask] = useState({ title: "", description: "", priority: "", status: "" , "dueDate": "" });
 
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [newHabit, setNewHabit] = useState({ title: "", description: "", frequency: "" });
 
   const navigate = useNavigate();
-
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
-
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const reordered = reorder(tasks, result.source.index, result.destination.index);
-    setTasks(reordered);
-  };
-
-  const handleAddTask = async () => {
-    try {
-      const url = editingTaskId
-        ? `http://localhost:8080/api/tasks/${editingTaskId}`
-        : `http://localhost:8080/api/tasks/user/${userId}`;
-
-      const method = editingTaskId ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...newTask, userId })
-      });
-
-      if (!response.ok) throw new Error("Failed to save task");
-
-      const saved = await response.json();
-
-      if (editingTaskId) {
-        setTasks(prev => prev.map(t => t.id === saved.id ? saved : t));
-      } else {
-        setTasks([...tasks, saved]);
-      }
-
-      setNewTask({ title: "", description: "", priority: "", status: "", dueDate: "" });
-      setEditingTaskId(null);
-      setShowTaskForm(false);
-    } catch (err) {
-      console.error("Error saving task:", err);
-    }
-  };
-
-  const incompleteTasks = tasks.filter(task => task.status !== "Done");
-  const completedTasks = tasks.filter(task => task.status === "Done");
-  const sortedTasks = [...incompleteTasks, ...completedTasks];
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -120,54 +69,26 @@ export default function Dashboard() {
     navigate("/");
   };
 
-  const toggleTaskStatus = async (taskId, currentStatus) => {
-  const newStatus = currentStatus === "Done" ? "In Progress" : "Done";
-
-  try {
-    const response = await fetch(`http://localhost:8080/api/tasks/${taskId}/status`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status: newStatus })
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update task status");
+  const handleAddTask = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/tasks/user/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ...newTask, userId })
+      });
+      if (!response.ok) {
+        throw new Error("Unauthorized or failed to add task");
+      }
+      const saved = await response.json();
+      setTasks([...tasks, saved]);
+      setNewTask({ title: "", description: "", priority: "", status: "" , dueDate: "" });
+      setShowTaskForm(false);
+    } catch (err) {
+      console.error("Error adding task:", err);
     }
-
-    // Optional: Refresh task list
-    const updated = await response.json();
-    setTasks(prev =>
-      prev.map(task => task.id === updated.id ? updated : task)
-    );
-
-  } catch (error) {
-    console.error("Error toggling task status:", error);
-    alert("Failed to update task status. Please try again.");
-  }
-};
-
-  // const handleAddTask = async () => {
-  //   try {
-  //     const response = await fetch(`http://localhost:8080/api/tasks/user/${userId}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify({ ...newTask, userId })
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Unauthorized or failed to add task");
-  //     }
-  //     const saved = await response.json();
-  //     setTasks([...tasks, saved]);
-  //     setNewTask({ title: "", description: "", priority: "", status: ""});
-  //     setShowTaskForm(false);
-  //   } catch (err) {
-  //     console.error("Error adding task:", err);
-  //   }
-  // };
+  };
 
   const handleAddHabit = async () => {
     try {
@@ -190,24 +111,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleDeleteTask = async (taskId) => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/tasks/${taskId}`, {
-        method: "DELETE"
-      });
-      if (!res.ok) throw new Error("Failed to delete task");
-      setTasks(tasks.filter(t => t.id !== taskId));
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
-  };
-
-  const handleEditTask = (task) => {
-    setNewTask(task);
-    setEditingTaskId(task.id);
-    setShowTaskForm(true);
-  };
-
   return (
     <div className={`dashboard-container ${background}`}>
       <header className="dashboard-header">
@@ -228,43 +131,14 @@ export default function Dashboard() {
         {showTasks && (
           <div className="task-section">
             <button onClick={() => setShowTaskForm(!showTaskForm)} className="add-button">+</button>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="task-list">
-                {(provided) => (
-                  <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    {sortedTasks.map((task, index) => (
-                      <Draggable key={task.id} draggableId={String(task.id)} index={index}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <div className="task-content">
-                              <input
-                                type="checkbox"
-                                checked={task.status === "Done"}
-                                onChange={() => toggleTaskStatus(task.id, task.status)}
-                              />
-                              <div className={`task-details ${task.status === "Done" ? "task-done" : ""}`}>
-                                <strong>{task.title}</strong><br />
-                                {task.description} – <em>{task.status}</em> - <strong>DueDate: {task.dueDate}</strong>
-                              </div>
-                              <div className="task-actions">
-                                <button className="edit-button" onClick={() => handleEditTask(task)}>🖊️</button>
-                                <button className="delete-button" onClick={() => handleDeleteTask(task.id)}>🗑️</button>
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </ul>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <ul>
+              {tasks.length > 0 ? tasks.map((task, index) => 
+                <li key={index}>
+                  <strong>{task.title}</strong><br />
+                  {task.description} – <em>{task.status}</em> - <strong>DueDate: {task.dueDate}</strong>
+                </li>
+                ) : <li>No tasks yet</li>}
+            </ul>
           </div>
         )}
 
@@ -275,7 +149,7 @@ export default function Dashboard() {
               <input type="text" placeholder="Description" value={newTask.description} onChange={e => setNewTask({ ...newTask, description: e.target.value })} />
               <input type="text" placeholder="Priority" value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} />
               <input type="text" placeholder="Status" value={newTask.status} onChange={e => setNewTask({ ...newTask, status: e.target.value })} />
-              <button onClick={handleAddTask} className="bg-toggle">{editingTaskId ? "Update Task" : "Add Task"}</button>
+              <button onClick={handleAddTask} className="bg-toggle">Add</button>
               <button onClick={() => setShowTaskForm(false)} className="logout-button">Close</button>
             </div>
           </div>
