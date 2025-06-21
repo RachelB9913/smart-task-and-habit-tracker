@@ -200,25 +200,6 @@ export default function Dashboard() {
     setShowTaskForm(true);
   };
 
-  const handleEditHabit = (habit) => {
-    setNewHabit(habit);
-    setEditingHabitId(habit.id);
-    setShowHabitForm(true);
-  };
-
-  const handleDeleteHabit = async (habitId) => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/habits/${habitId}`, {
-        method: "DELETE"
-      });
-      if (!res.ok) throw new Error("Failed to delete habit");
-
-      setHabits(habits.filter(h => h.id !== habitId));
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
-  };
-
   return (
     <div className={`dashboard-container ${background}`}>
       <header className="dashboard-header">
@@ -323,7 +304,7 @@ export default function Dashboard() {
               <input type="text" placeholder="Title" value={newHabit.title} onChange={e => setNewHabit({ ...newHabit, title: e.target.value })} />
               <input type="text" placeholder="Description" value={newHabit.description} onChange={e => setNewHabit({ ...newHabit, description: e.target.value })} />
               <input type="text" placeholder="Frequency" value={newHabit.frequency} onChange={e => setNewHabit({ ...newHabit, frequency: e.target.value })} />
-              <button onClick={handleAddHabit} className="bg-toggle"> {editingHabitId ? "Update Habit" : "Add Habit"}</button>
+              <button onClick={handleAddHabit} className="bg-toggle">Add</button>
               <button onClick={() => setShowHabitForm(false)} className="logout-button">Close</button>
             </div>
           </div>

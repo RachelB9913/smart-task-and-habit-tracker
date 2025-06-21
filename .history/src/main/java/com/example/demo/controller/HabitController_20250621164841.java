@@ -120,6 +120,7 @@ public class HabitController {
         existing.setDescription(updatedHabit.getDescription());
         existing.setFrequency(updatedHabit.getFrequency());
         existing.setProgress(updatedHabit.getProgress());
+        existing.setUser(updatedHabit.getUser());
 
         habitRepository.save(existing);
         return ResponseEntity.ok(HabitMapper.toDto(existing));

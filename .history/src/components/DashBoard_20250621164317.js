@@ -323,7 +323,7 @@ export default function Dashboard() {
               <input type="text" placeholder="Title" value={newHabit.title} onChange={e => setNewHabit({ ...newHabit, title: e.target.value })} />
               <input type="text" placeholder="Description" value={newHabit.description} onChange={e => setNewHabit({ ...newHabit, description: e.target.value })} />
               <input type="text" placeholder="Frequency" value={newHabit.frequency} onChange={e => setNewHabit({ ...newHabit, frequency: e.target.value })} />
-              <button onClick={handleAddHabit} className="bg-toggle"> {editingHabitId ? "Update Habit" : "Add Habit"}</button>
+              <button onClick={handleAddHabit} className="bg-toggle">Add</button>
               <button onClick={() => setShowHabitForm(false)} className="logout-button">Close</button>
             </div>
           </div>
