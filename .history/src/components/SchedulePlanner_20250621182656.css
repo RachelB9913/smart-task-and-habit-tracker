@@ -1,0 +1,108 @@
+.planner-container {
+  display: flex;
+  height: calc(100vh - 120px); /* adjusted for header */
+  font-family: 'Manrope', sans-serif;
+}
+
+.task-sidebar {
+  width: 200px;
+  background: white;
+  padding: 1rem;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  border-radius: 1rem;
+  margin: 1rem;
+  height: fit-content;
+}
+
+.task-item {
+  background: hsl(211, 69%, 90%);
+  color: #031d3e;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-grid {
+  flex: 1;
+  overflow: auto;
+  margin: 1rem;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.grid-header {
+  display: flex;
+  background: #cfe2ff;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+}
+
+.grid-body .row {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+.cell {
+  border-right: 1px solid #eee;
+  padding: 0.5rem;
+  min-width: 120px;
+  min-height: 50px;
+  box-sizing: border-box;
+}
+
+.hour-cell {
+  background: #f9f9f9;
+  width: 80px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ccc;
+  height: 50px; /* same as .day-cell and .time-slot */
+}
+
+.time-slot {
+  background-color: #e9c8c8de;
+  border-radius: 6px;
+  height: 50px;
+}
+
+.time-slot:hover {
+  background-color: #e7f5ff;
+  cursor: pointer;
+}
+
+.day-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #cfe2ff;
+  border-right: 1px solid #ccc;
+  height: 50px; /* ensure consistent cell height */
+  font-weight: 600;
+}
+
+.scheduled-task {
+  background-color: #a8dadc;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-align: center;
+  display:block;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #d00000;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}

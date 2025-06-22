@@ -1,0 +1,61 @@
+.planner-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Manrope', sans-serif;
+}
+
+.task-sidebar {
+  width: 200px;
+  background: #f2f2f2;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.task-item {
+  background: #d9eaff;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.calendar-grid {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-header {
+  display: flex;
+  background: #e0ecff;
+  font-weight: bold;
+}
+
+.grid-body .row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.cell {
+  border-right: 1px solid #ccc;
+  padding: 0.5rem;
+  min-width: 120px;
+  min-height: 50px;
+  box-sizing: border-box;
+}
+
+.hour-cell {
+  background: #f9f9f9;
+  width: 80px;
+  font-weight: bold;
+}
+
+.time-slot {
+  background-color: #ffffff;
+}
+
+.day-cell {
+  text-align: center;
+  background: #cfe2ff;
+}
