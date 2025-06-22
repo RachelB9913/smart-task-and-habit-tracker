@@ -28,7 +28,8 @@ public class SecurityConfig {
                 "/api/tasks/**"
                 ).permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            .httpBasic(httpBasic -> {}).formLogin().disable(); 
         return http.build();
     }
 

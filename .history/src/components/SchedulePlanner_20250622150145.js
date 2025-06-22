@@ -80,16 +80,14 @@ export default function SchedulePlanner() {
             Back to Dashboard
           </button>
         </div>
+        <button onClick={saveSchedule} className="logout-button">
+          💾 Save Schedule
+        </button>
       </header>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="planner-container">
           <aside className="task-sidebar">
-            <div className="save-button-container">
-              <button className="save-button" onClick={saveSchedule} >
-                💾 Save Schedule
-              </button>
-            </div>
             <h3>Tasks</h3>
             <Droppable droppableId="taskList">
               {(provided) => (
@@ -104,7 +102,7 @@ export default function SchedulePlanner() {
                         >
                         {(provided, snapshot) => (
                           <li
-                            className={`task-item ${isScheduled || task.status === "Done" ? "grayed-out" : ""}`}
+                            className={`task-item ${isScheduled ? 'grayed-out' : ''}`}
                             style={snapshot.isDragging ? { boxShadow: '0 0 6px #999' } : {}}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -153,64 +151,40 @@ export default function SchedulePlanner() {
                               <Draggable draggableId={String(task.id)} index={0}>
                                 {(provided) => (
                                   <div
-                                    className={`scheduled-task ${task.status === "Done" ? "done-task" : ""}`}
+                                    className="scheduled-task"
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
                                     <span>{task.title}</span>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                      {task.status !== "Done" && (
-                                        <>
-                                          <button
-                                            className="mark-done-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
+                                    <button
+                                        className="remove-btn"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
 
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
-                                                method: "PATCH",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ status: "Done" }),
-                                              })
-                                                .then((res) => {
-                                                  if (!res.ok) throw new Error("Failed to mark done");
-                                                  return res.text();
-                                                })
-                                                .then(() => {
-                                                  task.status = "Done";
-                                                  setScheduledTasks((prev) => ({ ...prev }));
-                                                })
-                                                .catch((err) => console.error("❌ Failed to mark done:", err));
-                                            }}
-                                          >
-                                          ✅
-                                          </button>
+                                            // 1. Update state immediately
+                                            setScheduledTasks((prev) => {
+                                            const updated = { ...prev };
+                                            delete updated[slotId];
+                                            return updated;
+                                            });
 
-                                          <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setScheduledTasks((prev) => {
-                                                const updated = { ...prev };
-                                                delete updated[slotId];
-                                                return updated;
-                                              });
-
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
-                                                method: "PUT",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ scheduledTime: null }),
-                                              })
-                                                .then((res) => res.json())
-                                                .then((data) => console.log("🗑️ Unschedule successful:", data))
-                                                .catch((err) => console.error("❌ Error unscheduling task:", err));
-                                            }}
-                                          >
-                                            ❌
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
+                                            // 2. Update backend to remove schedule
+                                            fetch(`/api/tasks/${task.id}/schedule`, {
+                                            method: "PUT",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify({ scheduledTime: null }),
+                                            })
+                                            .then((res) => {
+                                                if (!res.ok) throw new Error("Failed to unschedule task");
+                                                return res.json();
+                                            })
+                                            .then((data) => console.log("🗑️ Unschedule successful:", data))
+                                            .catch((err) => console.error("❌ Error unscheduling task:", err));
+                                        }}
+                                        >
+                                        ❌
+                                    </button>
                                   </div>
                                 )}
                               </Draggable>

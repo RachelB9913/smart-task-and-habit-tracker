@@ -28,7 +28,11 @@ public class SecurityConfig {
                 "/api/tasks/**"
                 ).permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            .httpBasic(httpBasic -> {}).authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/tasks/**").permitAll()
+                .anyRequest().authenticated()
+            ); 
         return http.build();
     }
 

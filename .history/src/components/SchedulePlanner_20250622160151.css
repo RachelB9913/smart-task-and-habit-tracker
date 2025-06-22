@@ -144,18 +144,5 @@
 .save-button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.done-task {
-  background-color: #90ee90; /* light green for done tasks */
-}
-
-.mark-done-btn {
-  background: none;
-  border: none;
-  color: green;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-left: 0.5rem;
+  margin-bottom: 2rem;
 }

@@ -159,7 +159,7 @@ export default function SchedulePlanner() {
                                     {...provided.dragHandleProps}
                                   >
                                     <span>{task.title}</span>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0px" }}>
                                       {task.status !== "Done" && (
                                         <>
                                           <button

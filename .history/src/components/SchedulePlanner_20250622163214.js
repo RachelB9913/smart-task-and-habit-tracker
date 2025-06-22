@@ -161,55 +161,53 @@ export default function SchedulePlanner() {
                                     <span>{task.title}</span>
                                     <div style={{ display: "flex", alignItems: "center" }}>
                                       {task.status !== "Done" && (
-                                        <>
-                                          <button
-                                            className="mark-done-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
+                                        <button
+                                          className="mark-done-btn"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
 
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
-                                                method: "PATCH",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ status: "Done" }),
+                                            fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
+                                              method: "PUT",
+                                              headers: { "Content-Type": "application/json" },
+                                              body: JSON.stringify({ status: "Done" }),
+                                            })
+                                              .then((res) => {
+                                                if (!res.ok) throw new Error("Failed to mark done");
+                                                return res.text(); // instead of res.json()
                                               })
-                                                .then((res) => {
-                                                  if (!res.ok) throw new Error("Failed to mark done");
-                                                  return res.text();
-                                                })
-                                                .then(() => {
-                                                  task.status = "Done";
-                                                  setScheduledTasks((prev) => ({ ...prev }));
-                                                })
-                                                .catch((err) => console.error("❌ Failed to mark done:", err));
-                                            }}
-                                          >
+                                              .then((text) => {
+                                                console.log("✅ Marked as done:", text);
+                                                task.status = "Done";
+                                                setScheduledTasks((prev) => ({ ...prev }));
+                                              })
+                                              .catch((err) => console.error("❌ Failed to mark done:", err));
+                                          }}
+                                        >
                                           ✅
-                                          </button>
-
-                                          <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setScheduledTasks((prev) => {
-                                                const updated = { ...prev };
-                                                delete updated[slotId];
-                                                return updated;
-                                              });
-
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
-                                                method: "PUT",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ scheduledTime: null }),
-                                              })
-                                                .then((res) => res.json())
-                                                .then((data) => console.log("🗑️ Unschedule successful:", data))
-                                                .catch((err) => console.error("❌ Error unscheduling task:", err));
-                                            }}
-                                          >
-                                            ❌
-                                          </button>
-                                        </>
+                                        </button>
                                       )}
+                                      <button
+                                        className="remove-btn"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setScheduledTasks((prev) => {
+                                            const updated = { ...prev };
+                                            delete updated[slotId];
+                                            return updated;
+                                          });
+
+                                          fetch(`/api/tasks/${task.id}/schedule`, {
+                                            method: "PUT",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify({ scheduledTime: null }),
+                                          })
+                                            .then((res) => res.json())
+                                            .then((data) => console.log("🗑️ Unschedule successful:", data))
+                                            .catch((err) => console.error("❌ Error unscheduling task:", err));
+                                        }}
+                                      >
+                                        ❌
+                                      </button>
                                     </div>
                                   </div>
                                 )}

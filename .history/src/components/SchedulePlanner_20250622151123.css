@@ -128,7 +128,7 @@
 .save-button {
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #2ecbb1;
+  background-color: #0d6efd;
   color: white;
   border: none;
   border-radius: 6px;
@@ -137,25 +137,3 @@
   transition: background-color 0.2s ease;
 }
 
-.save-button:hover {
-  background-color: #137969;
-}
-
-.save-button-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.done-task {
-  background-color: #90ee90; /* light green for done tasks */
-}
-
-.mark-done-btn {
-  background: none;
-  border: none;
-  color: green;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-left: 0.5rem;
-}

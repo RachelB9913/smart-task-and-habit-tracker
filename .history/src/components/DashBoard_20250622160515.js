@@ -60,7 +60,7 @@ export default function Dashboard() {
         setTasks([...tasks, saved]);
       }
 
-      setNewTask({ title: "", description: "", priority: "", status: ""});
+      setNewTask({ title: "", description: "", priority: "", status: "", dueDate: "" });
       setEditingTaskId(null);
       setShowTaskForm(false);
     } catch (err) {
@@ -260,7 +260,7 @@ export default function Dashboard() {
                               />
                               <div className={`task-details ${task.status === "Done" ? "task-done" : ""}`}>
                                 <strong>{task.title}</strong><br />
-                                {task.description} – <em>{task.status}</em>
+                                {task.description} – <em>{task.status}</em> - <strong>DueDate: {task.dueDate}</strong>
                               </div>
                               <div className="task-actions">
                                 <button className="edit-button" onClick={() => handleEditTask(task)}>🖊️</button>

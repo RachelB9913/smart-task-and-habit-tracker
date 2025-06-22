@@ -183,7 +183,7 @@ export default function SchedulePlanner() {
                                                 .catch((err) => console.error("❌ Failed to mark done:", err));
                                             }}
                                           >
-                                          ✅
+                                            ✅
                                           </button>
 
                                           <button
