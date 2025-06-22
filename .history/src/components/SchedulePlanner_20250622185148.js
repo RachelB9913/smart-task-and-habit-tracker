@@ -106,8 +106,10 @@ export default function SchedulePlanner() {
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    const isScheduled = Object.values(scheduledTasks).includes(String(task.id));
+                  {tasks
+  .filter(task => !task.scheduledTime)  // only show unscheduled tasks
+  .map((task, index) => {
+    const isScheduled = Object.values(scheduledTasks).includes(String(task.id));
                     return (
                       <Draggable
                         draggableId={String(task.id)}

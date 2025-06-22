@@ -282,30 +282,10 @@ export default function Dashboard() {
         {showTaskForm && (
           <div className="form-popup-overlay">
             <div className="form-popup">
-              <input
-                type="text"
-                placeholder="Title"
-                value={newTask.title ?? ""}
-                onChange={e => setNewTask({ ...newTask, title: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Description"
-                value={newTask.description ?? ""}
-                onChange={e => setNewTask({ ...newTask, description: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Time to do"
-                value={newTask.scheduledTime ?? ""}
-                onChange={e => setNewTask({ ...newTask, scheduledTime: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Status"
-                value={newTask.status ?? ""}
-                onChange={e => setNewTask({ ...newTask, status: e.target.value })}
-              />
+              <input type="text" placeholder="Title" value={newTask.title} onChange={e => setNewTask({ ...newTask, title: e.target.value })} />
+              <input type="text" placeholder="Description" value={newTask.description} onChange={e => setNewTask({ ...newTask, description: e.target.value })} />
+              <input type="text" placeholder="Time to do" value={newTask.scheduledTime} onChange={e => setNewTask({ ...newTask, scheduledTime: e.target.value })} />
+              <input type="text" placeholder="Status" value={newTask.status} onChange={e => setNewTask({ ...newTask, status: e.target.value })} />
               <button onClick={handleAddTask} className="bg-toggle">{editingTaskId ? "Update Task" : "Add Task"}</button>
               <button onClick={() => setShowTaskForm(false)} className="logout-button">Close</button>
             </div>

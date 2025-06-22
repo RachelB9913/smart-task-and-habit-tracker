@@ -154,92 +154,39 @@ export default function SchedulePlanner() {
                     const task = tasks.find((t) => String(t.id) === taskId);
 
                     return (
-                      <Droppable droppableId={slotId} key={slotId}>
-                        {(provided, snapshot) => (
-                          <div
-                            className={`cell time-slot ${snapshot.isDraggingOver ? "drag-over" : ""}`}
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            {task && (
-                              <Draggable draggableId={String(task.id)} index={0}>
-                                {(provided) => (
-                                  <div
-                                    className={`scheduled-task ${task.status === "Done" ? "done-task" : ""}`}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <span>{task.title}</span>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                      {task.status !== "Done" && (
-                                        <>
-                                          <button
-                                            className="mark-done-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
+                      <Droppable droppableId="taskList" isDropDisabled={true}>
+  {(provided) => (
+    <ul {...provided.droppableProps} ref={provided.innerRef}>
+      {tasks.map((task, index) => {
+        const isGrayed = !!task.scheduledTime;
 
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
-                                                method: "PATCH",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ status: "Done" }),
-                                              })
-                                                .then((res) => {
-                                                  if (!res.ok) throw new Error("Failed to mark done");
-                                                  return res.text();
-                                                })
-                                                .then(() => {
-                                                  task.status = "Done";
-                                                  setScheduledTasks((prev) => ({ ...prev }));
-                                                })
-                                                .catch((err) => console.error("❌ Failed to mark done:", err));
-                                            }}
-                                          >
-                                            ✅
-                                          </button>
-
-                                          <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setScheduledTasks((prev) => {
-                                                const updated = { ...prev };
-                                                delete updated[slotId];
-                                                return updated;
-                                              });
-
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
-                                                method: "PUT",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ scheduledTime: null }),
-                                              })
-                                                .then((res) => res.json())
-                                                .then((data) => console.log("🗑️ Unschedule successful:", data))
-                                                .catch((err) => console.error("❌ Error unscheduling task:", err));
-                                            }}
-                                          >
-                                            ❌
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                              </Draggable>
-                            )}
-
-                            {(scheduledTasksByTime[slotId] || []).map((t) => (
-                              (!task || t.id !== task.id) && (
-                                <div key={t.id} className="scheduled-task db-task">
-                                  {t.title}
-                                </div>
-                              )
-                            ))}
-
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
+        return isGrayed ? (
+          <li key={task.id} className="task-item grayed-out">
+            {task.title}
+          </li>
+        ) : (
+          <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+            {(provided, snapshot) => (
+              <li
+                className="task-item"
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={{
+                  ...provided.draggableProps.style,
+                  boxShadow: snapshot.isDragging ? "0 0 6px #999" : "none",
+                }}
+              >
+                {task.title}
+              </li>
+            )}
+          </Draggable>
+        );
+      })}
+      {provided.placeholder}
+    </ul>
+  )}
+</Droppable>
                     );
                   })}
                 </div>

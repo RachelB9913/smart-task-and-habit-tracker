@@ -107,12 +107,15 @@ export default function SchedulePlanner() {
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
                   {tasks.map((task, index) => {
-                    const isScheduled = Object.values(scheduledTasks).includes(String(task.id));
+                    const isScheduled =
+                      Object.values(scheduledTasks).includes(String(task.id)) ||
+                      Object.values(scheduledTasksByTime).flat().some(t => t.id === task.id);
                     return (
                       <Draggable
                         draggableId={String(task.id)}
                         index={index}
                         key={`${task.id}-${isScheduled ? "scheduled" : "unscheduled"}`}
+                        isDragDisabled={isScheduled || task.status === "Done"}
                       >
                         {(provided, snapshot) => (
                           <li
@@ -150,8 +153,11 @@ export default function SchedulePlanner() {
                   <div className="cell hour-cell">{hour}:00</div>
                   {days.map((day) => {
                     const slotId = `${day}-${hour}:00`;
-                    const taskId = scheduledTasks[slotId];
-                    const task = tasks.find((t) => String(t.id) === taskId);
+                    const scheduledTasksForSlot = scheduledTasksByTime[slotId] || [];
+                    if (scheduledTasks[slotId]) {
+                      const manualTask = tasks.find(t => String(t.id) === scheduledTasks[slotId]);
+                      if (manualTask) scheduledTasksForSlot.push(manualTask);
+                    }
 
                     return (
                       <Droppable droppableId={slotId} key={slotId}>
@@ -161,8 +167,8 @@ export default function SchedulePlanner() {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                           >
-                            {task && (
-                              <Draggable draggableId={String(task.id)} index={0}>
+                            {scheduledTasksForSlot.map((task, i) => (
+                              <Draggable draggableId={String(task.id)} index={i} key={`${slotId}-${task.id}`}>
                                 {(provided) => (
                                   <div
                                     className={`scheduled-task ${task.status === "Done" ? "done-task" : ""}`}
@@ -171,71 +177,63 @@ export default function SchedulePlanner() {
                                     {...provided.dragHandleProps}
                                   >
                                     <span>{task.title}</span>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                      {task.status !== "Done" && (
-                                        <>
-                                          <button
-                                            className="mark-done-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
-                                                method: "PATCH",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ status: "Done" }),
+                                    {task.status !== "Done" && (
+                                      <div style={{ display: "flex", alignItems: "center" }}>
+                                        <button
+                                          className="mark-done-btn"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
+                                              method: "PATCH",
+                                              headers: { "Content-Type": "application/json" },
+                                              body: JSON.stringify({ status: "Done" }),
+                                            })
+                                              .then(res => {
+                                                if (!res.ok) throw new Error("Failed to mark done");
+                                                return res.text();
                                               })
-                                                .then((res) => {
-                                                  if (!res.ok) throw new Error("Failed to mark done");
-                                                  return res.text();
-                                                })
-                                                .then(() => {
-                                                  task.status = "Done";
-                                                  setScheduledTasks((prev) => ({ ...prev }));
-                                                })
-                                                .catch((err) => console.error("❌ Failed to mark done:", err));
-                                            }}
-                                          >
-                                            ✅
-                                          </button>
+                                              .then(() => {
+                                                task.status = "Done";
+                                                setScheduledTasks(prev => ({ ...prev }));
+                                              })
+                                              .catch(err => console.error("❌ Failed to mark done:", err));
+                                          }}
+                                        >
+                                          ✅
+                                        </button>
 
-                                          <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setScheduledTasks((prev) => {
-                                                const updated = { ...prev };
-                                                delete updated[slotId];
-                                                return updated;
+                                        <button
+                                          className="remove-btn"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setScheduledTasks((prev) => {
+                                              const updated = { ...prev };
+                                              Object.keys(updated).forEach((key) => {
+                                                if (updated[key] === String(task.id)) {
+                                                  delete updated[key];
+                                                }
                                               });
+                                              return updated;
+                                            });
 
-                                              fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
-                                                method: "PUT",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({ scheduledTime: null }),
-                                              })
-                                                .then((res) => res.json())
-                                                .then((data) => console.log("🗑️ Unschedule successful:", data))
-                                                .catch((err) => console.error("❌ Error unscheduling task:", err));
-                                            }}
-                                          >
-                                            ❌
-                                          </button>
-                                        </>
-                                      )}
-                                    </div>
+                                            fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
+                                              method: "PUT",
+                                              headers: { "Content-Type": "application/json" },
+                                              body: JSON.stringify({ scheduledTime: null }),
+                                            })
+                                              .then((res) => res.json())
+                                              .then((data) => console.log("🗑️ Unschedule successful:", data))
+                                              .catch((err) => console.error("❌ Error unscheduling task:", err));
+                                          }}
+                                        >
+                                          ❌
+                                        </button>
+                                      </div>
+                                    )}
                                   </div>
                                 )}
                               </Draggable>
-                            )}
-
-                            {(scheduledTasksByTime[slotId] || []).map((t) => (
-                              (!task || t.id !== task.id) && (
-                                <div key={t.id} className="scheduled-task db-task">
-                                  {t.title}
-                                </div>
-                              )
                             ))}
-
                             {provided.placeholder}
                           </div>
                         )}

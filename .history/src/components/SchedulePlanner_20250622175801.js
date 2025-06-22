@@ -150,49 +150,50 @@ export default function SchedulePlanner() {
                   <div className="cell hour-cell">{hour}:00</div>
                   {days.map((day) => {
                     const slotId = `${day}-${hour}:00`;
-                    const taskId = scheduledTasks[slotId];
-                    const task = tasks.find((t) => String(t.id) === taskId);
+                    const scheduledTasksForSlot = scheduledTasksByTime[slotId] || [];
+                    if (scheduledTasks[slotId]) {
+                      const manualTask = tasks.find(t => String(t.id) === scheduledTasks[slotId]);
+                      if (manualTask) scheduledTasksForSlot.push(manualTask);
+                    }
 
                     return (
                       <Droppable droppableId={slotId} key={slotId}>
-                        {(provided, snapshot) => (
-                          <div
-                            className={`cell time-slot ${snapshot.isDraggingOver ? "drag-over" : ""}`}
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            {task && (
-                              <Draggable draggableId={String(task.id)} index={0}>
-                                {(provided) => (
-                                  <div
-                                    className={`scheduled-task ${task.status === "Done" ? "done-task" : ""}`}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <span>{task.title}</span>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
+                          {(provided, snapshot) => (
+                            <div
+                              className={`cell time-slot ${snapshot.isDraggingOver ? "drag-over" : ""}`}
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              {scheduledTasksForSlot.map((task, i) => (
+                                <Draggable draggableId={String(task.id)} index={i} key={`${slotId}-${task.id}`}>
+                                  {(provided) => (
+                                    <div
+                                      className={`scheduled-task ${task.status === "Done" ? "done-task" : ""}`}
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      <span>{task.title}</span>
                                       {task.status !== "Done" && (
-                                        <>
+                                        <div style={{ display: "flex", alignItems: "center" }}>
                                           <button
                                             className="mark-done-btn"
                                             onClick={(e) => {
                                               e.stopPropagation();
-
                                               fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
                                                 method: "PATCH",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify({ status: "Done" }),
                                               })
-                                                .then((res) => {
+                                                .then(res => {
                                                   if (!res.ok) throw new Error("Failed to mark done");
                                                   return res.text();
                                                 })
                                                 .then(() => {
                                                   task.status = "Done";
-                                                  setScheduledTasks((prev) => ({ ...prev }));
+                                                  setScheduledTasks(prev => ({ ...prev }));
                                                 })
-                                                .catch((err) => console.error("❌ Failed to mark done:", err));
+                                                .catch(err => console.error("❌ Failed to mark done:", err));
                                             }}
                                           >
                                             ✅
@@ -204,7 +205,11 @@ export default function SchedulePlanner() {
                                               e.stopPropagation();
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
-                                                delete updated[slotId];
+                                                Object.keys(updated).forEach((key) => {
+                                                  if (updated[key] === String(task.id)) {
+                                                    delete updated[key];
+                                                  }
+                                                });
                                                 return updated;
                                               });
 
@@ -220,26 +225,16 @@ export default function SchedulePlanner() {
                                           >
                                             ❌
                                           </button>
-                                        </>
+                                        </div>
                                       )}
                                     </div>
-                                  </div>
-                                )}
-                              </Draggable>
-                            )}
-
-                            {(scheduledTasksByTime[slotId] || []).map((t) => (
-                              (!task || t.id !== task.id) && (
-                                <div key={t.id} className="scheduled-task db-task">
-                                  {t.title}
-                                </div>
-                              )
-                            ))}
-
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
+                                  )}
+                                </Draggable>
+                              ))}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
                     );
                   })}
                 </div>

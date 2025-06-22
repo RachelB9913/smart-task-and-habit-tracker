@@ -150,8 +150,11 @@ export default function SchedulePlanner() {
                   <div className="cell hour-cell">{hour}:00</div>
                   {days.map((day) => {
                     const slotId = `${day}-${hour}:00`;
-                    const taskId = scheduledTasks[slotId];
-                    const task = tasks.find((t) => String(t.id) === taskId);
+                    const scheduledTasksForSlot = scheduledTasksByTime[slotId] || [];
+                    if (scheduledTasks[slotId]) {
+                      const manualTask = tasks.find(t => String(t.id) === scheduledTasks[slotId]);
+                      if (manualTask) scheduledTasksForSlot.push(manualTask);
+                    }
 
                     return (
                       <Droppable droppableId={slotId} key={slotId}>

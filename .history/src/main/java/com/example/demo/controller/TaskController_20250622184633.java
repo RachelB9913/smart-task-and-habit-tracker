@@ -126,7 +126,6 @@ public class TaskController {
         existing.setPriority(updatedTask.getPriority());
         existing.setStatus(updatedTask.getStatus());
         existing.setDueDate(updatedTask.getDueDate());
-        existing.setScheduledTime(updatedTask.getScheduledTime());
 
         taskRepository.save(existing);
         return ResponseEntity.ok(TaskMapper.toDto(existing));

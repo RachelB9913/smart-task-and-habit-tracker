@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [background, setBackground] = useState("light");
 
   const [showTaskForm, setShowTaskForm] = useState(false);
-  const [newTask, setNewTask] = useState({ title: "", description: "", scheduledTime: "", status: ""});
+  const [newTask, setNewTask] = useState({ title: "", description: "", priority: "", status: ""});
 
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [newHabit, setNewHabit] = useState({ title: "", description: "", frequency: "" });
@@ -60,7 +60,7 @@ export default function Dashboard() {
         setTasks([...tasks, saved]);
       }
 
-      setNewTask({ title: "", description: "", scheduledTime: "", status: ""});
+      setNewTask({ title: "", description: "", priority: "", status: ""});
       setEditingTaskId(null);
       setShowTaskForm(false);
     } catch (err) {
@@ -260,7 +260,7 @@ export default function Dashboard() {
                               />
                               <div className={`task-details ${task.status === "Done" ? "task-done" : ""}`}>
                                 <strong>{task.title}</strong><br />
-                                {task.description} – {task.scheduledTime} – <em>{task.status}</em>
+                                {task.description} – {task.description} - <em>{task.status}</em>
                               </div>
                               <div className="task-actions">
                                 <button className="edit-button" onClick={() => handleEditTask(task)}>🖊️</button>
@@ -282,30 +282,10 @@ export default function Dashboard() {
         {showTaskForm && (
           <div className="form-popup-overlay">
             <div className="form-popup">
-              <input
-                type="text"
-                placeholder="Title"
-                value={newTask.title ?? ""}
-                onChange={e => setNewTask({ ...newTask, title: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Description"
-                value={newTask.description ?? ""}
-                onChange={e => setNewTask({ ...newTask, description: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Time to do"
-                value={newTask.scheduledTime ?? ""}
-                onChange={e => setNewTask({ ...newTask, scheduledTime: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Status"
-                value={newTask.status ?? ""}
-                onChange={e => setNewTask({ ...newTask, status: e.target.value })}
-              />
+              <input type="text" placeholder="Title" value={newTask.title} onChange={e => setNewTask({ ...newTask, title: e.target.value })} />
+              <input type="text" placeholder="Description" value={newTask.description} onChange={e => setNewTask({ ...newTask, description: e.target.value })} />
+              <input type="text" placeholder="Priority" value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} />
+              <input type="text" placeholder="Status" value={newTask.status} onChange={e => setNewTask({ ...newTask, status: e.target.value })} />
               <button onClick={handleAddTask} className="bg-toggle">{editingTaskId ? "Update Task" : "Add Task"}</button>
               <button onClick={() => setShowTaskForm(false)} className="logout-button">Close</button>
             </div>
