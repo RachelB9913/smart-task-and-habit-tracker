@@ -63,6 +63,7 @@ export default function SchedulePlanner() {
 
         setTasks(taskDetails);
 
+        // 🔁 Build initial scheduledTasks from task.scheduledTime
         const initialSchedule = {};
         taskDetails.forEach(task => {
           if (task.scheduledTime) {

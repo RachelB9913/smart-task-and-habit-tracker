@@ -48,11 +48,11 @@ export default function SchedulePlanner() {
     if (saved) setScheduledTasks(JSON.parse(saved));
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
   const userId = localStorage.getItem("userId");
   if (!userId) return;
 
-    fetch(`http://localhost:8080/api/users/${userId}`)
+  fetch(`http://localhost:8080/api/users/${userId}`)
       .then(res => res.json())
       .then(async (userData) => {
         const taskDetails = await Promise.all(
@@ -60,16 +60,7 @@ export default function SchedulePlanner() {
             fetch(`http://localhost:8080/api/tasks/${id}`).then(res => res.json())
           )
         );
-
         setTasks(taskDetails);
-
-        const initialSchedule = {};
-        taskDetails.forEach(task => {
-          if (task.scheduledTime) {
-            initialSchedule[task.scheduledTime] = String(task.id);
-          }
-        });
-        setScheduledTasks(initialSchedule);
       })
       .catch(err => console.error("Failed to load tasks:", err));
   }, []);
