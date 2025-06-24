@@ -436,7 +436,6 @@ export default function SchedulePlanner() {
                                                 }];
                                                 localStorage.setItem("habitCompletions", JSON.stringify(updated));
                                                 setCompletedHabitIds(prev => [...prev, id]);
-                                                window.dispatchEvent(new Event("storage-updated"));
                                               }
                                             }}
                                           >
@@ -551,7 +550,6 @@ export default function SchedulePlanner() {
                                                           },
                                                         ];
                                                         localStorage.setItem("taskCompletions", JSON.stringify(updated));
-                                                        window.dispatchEvent(new Event("storage-updated"));
                                                       }
                                                       setScheduledTasks((prev) => ({ ...prev }));
                                                     })

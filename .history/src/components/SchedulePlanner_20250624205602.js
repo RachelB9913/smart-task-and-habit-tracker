@@ -141,6 +141,14 @@ function mergeScheduledTasks(savedSchedule, updatedTasks) {
   return merged;
 }
 
+function removeCompletion(type, id) {
+  const key = type === "task" ? "taskCompletions" : "habitCompletions";
+  const completions = JSON.parse(localStorage.getItem(key) || "[]");
+  const filtered = completions.filter(entry => entry.taskId !== id && entry.cloneId !== id);
+  localStorage.setItem(key, JSON.stringify(filtered));
+  window.dispatchEvent(new Event("storage-updated"));
+}
+
 export default function SchedulePlanner() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -278,7 +286,7 @@ export default function SchedulePlanner() {
     // ✅ Also clear completions
     localStorage.removeItem("taskCompletions");
     localStorage.removeItem("habitCompletions");
-    window.dispatchEvent(new Event("storage-updated")); // trigger stat refresh
+    window.dispatchEvent(new Event("storage-updated")); // 🔁 trigger stat refresh
 
     alert("✅ Schedule has been cleared!");
   } catch (err) {
@@ -436,7 +444,6 @@ export default function SchedulePlanner() {
                                                 }];
                                                 localStorage.setItem("habitCompletions", JSON.stringify(updated));
                                                 setCompletedHabitIds(prev => [...prev, id]);
-                                                window.dispatchEvent(new Event("storage-updated"));
                                               }
                                             }}
                                           >
@@ -551,7 +558,6 @@ export default function SchedulePlanner() {
                                                           },
                                                         ];
                                                         localStorage.setItem("taskCompletions", JSON.stringify(updated));
-                                                        window.dispatchEvent(new Event("storage-updated"));
                                                       }
                                                       setScheduledTasks((prev) => ({ ...prev }));
                                                     })

@@ -11,7 +11,15 @@ import "../Dashboard.css";
 import StatisticsPanel from "./StatisticsPanel";
 
 const hours = Array.from({ length: 18 }, (_, i) => i + 6); // 6 to 23
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const timeBlocks = {
   morning: [6, 7, 8, 9, 10],
@@ -27,19 +35,6 @@ function getPreferredHours(preferredTime) {
   }
   const block = timeBlocks[preferredTime.toLowerCase()];
   return block || [];
-}
-
-function removeCompletion(type, id) {
-  const key = type === "task" ? "taskCompletions" : "habitCompletions";
-  const raw = localStorage.getItem(key);
-  if (!raw) return;
-  const data = JSON.parse(raw);
-  const updated = data.filter((entry) => {
-    if (type === "task") return entry.taskId !== id;
-    else return entry.cloneId !== id;
-  });
-  localStorage.setItem(key, JSON.stringify(updated));
-  window.dispatchEvent(new Event("storage-updated"));
 }
 
 const allDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -139,6 +134,14 @@ function mergeScheduledTasks(savedSchedule, updatedTasks) {
   });
 
   return merged;
+}
+
+function removeCompletion(type, id) {
+  const key = type === "task" ? "taskCompletions" : "habitCompletions";
+  const completions = JSON.parse(localStorage.getItem(key) || "[]");
+  const filtered = completions.filter(entry => entry.taskId !== id && entry.cloneId !== id);
+  localStorage.setItem(key, JSON.stringify(filtered));
+  window.dispatchEvent(new Event("storage-updated"));
 }
 
 export default function SchedulePlanner() {
@@ -278,7 +281,7 @@ export default function SchedulePlanner() {
     // ✅ Also clear completions
     localStorage.removeItem("taskCompletions");
     localStorage.removeItem("habitCompletions");
-    window.dispatchEvent(new Event("storage-updated")); // trigger stat refresh
+    window.dispatchEvent(new Event("storage-updated")); // 🔁 trigger stat refresh
 
     alert("✅ Schedule has been cleared!");
   } catch (err) {
@@ -424,8 +427,9 @@ export default function SchedulePlanner() {
                                               const completions = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
 
                                               if (completedHabitIds.includes(id)) {
-                                                //undo
-                                                removeCompletion("habit", id);
+                                                // Undo
+                                                const updated = completions.filter(entry => entry.cloneId !== id);
+                                                localStorage.setItem("habitCompletions", JSON.stringify(updated));
                                                 setCompletedHabitIds(prev => prev.filter(x => x !== id));
                                               } else {
                                                 // Mark as done
@@ -436,7 +440,6 @@ export default function SchedulePlanner() {
                                                 }];
                                                 localStorage.setItem("habitCompletions", JSON.stringify(updated));
                                                 setCompletedHabitIds(prev => [...prev, id]);
-                                                window.dispatchEvent(new Event("storage-updated"));
                                               }
                                             }}
                                           >
@@ -493,11 +496,10 @@ export default function SchedulePlanner() {
                                               });
                                             }}
                                           >➕</button>
-                                         <button
+                                          <button
                                             className="remove-btn"
                                             onClick={(e) => {
                                               e.stopPropagation();
-                                              removeCompletion("habit", id);
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
                                                 updated[slotId] = updated[slotId].filter(val => val !== id);
@@ -551,7 +553,6 @@ export default function SchedulePlanner() {
                                                           },
                                                         ];
                                                         localStorage.setItem("taskCompletions", JSON.stringify(updated));
-                                                        window.dispatchEvent(new Event("storage-updated"));
                                                       }
                                                       setScheduledTasks((prev) => ({ ...prev }));
                                                     })
@@ -562,7 +563,6 @@ export default function SchedulePlanner() {
                                                 className="remove-btn"
                                                 onClick={(e) => {
                                                   e.stopPropagation();
-                                                  removeCompletion("task", task.id);
                                                   setScheduledTasks((prev) => {
                                                     const updated = { ...prev };
                                                     updated[slotId] = updated[slotId].filter(val => val !== String(task.id));
