@@ -36,6 +36,7 @@ function getPreferredHours(preferredTime) {
   return block || [];
 }
 
+
 const allDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 function getDaysFromFrequency(freq) {
   if (!freq) return [];
@@ -97,44 +98,6 @@ function autoPlaceHabits(habits, currentSchedule, tasks, setHabitClones) {
   return newSchedule;
 }
 
-function syncScheduleFromTasks(tasks) {
-  const newSchedule = {};
-  tasks.forEach(task => {
-    if (task.scheduledTime) {
-      if (!newSchedule[task.scheduledTime]) newSchedule[task.scheduledTime] = [];
-      newSchedule[task.scheduledTime].push(String(task.id));
-    }
-  });
-  return newSchedule;
-}
-
-function mergeScheduledTasks(savedSchedule, updatedTasks) {
-  const updatedSchedule = syncScheduleFromTasks(updatedTasks);
-
-  const merged = { ...savedSchedule };
-
-  // Remove any task IDs from the old schedule if they were updated
-  const updatedTaskIds = updatedTasks
-    .filter(t => t.scheduledTime)
-    .map(t => String(t.id));
-
-  // Remove any outdated placements of updated tasks
-  Object.keys(merged).forEach(slot => {
-    merged[slot] = merged[slot].filter(id => !updatedTaskIds.includes(id));
-    if (merged[slot].length === 0) {
-      delete merged[slot];
-    }
-  });
-
-  // Now apply the fresh placements from updated tasks
-  Object.entries(updatedSchedule).forEach(([slot, ids]) => {
-    if (!merged[slot]) merged[slot] = [];
-    merged[slot].push(...ids);
-  });
-
-  return merged;
-}
-
 export default function SchedulePlanner() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -171,7 +134,6 @@ export default function SchedulePlanner() {
           )
         );
         setTasks(taskDetails);
-        setScheduledTasks(syncScheduleFromTasks(taskDetails));
 
         const habitDetails = await Promise.all(
           (userData.habitIds || []).map(id =>
@@ -180,25 +142,26 @@ export default function SchedulePlanner() {
         );
         setHabits(habitDetails);
 
+        // ✅ Now restore saved schedule (after both are loaded)
         const saved = localStorage.getItem("savedSchedule");
         if (saved) {
-        const parsed = JSON.parse(saved);
-        const merged = location.state?.tasks
-          ? mergeScheduledTasks(parsed.scheduledTasks || {}, location.state.tasks)
-          : parsed.scheduledTasks;
-
-        if (merged) setScheduledTasks(merged);
-        if (parsed.habitClones) setHabitClones(parsed.habitClones);
-      } else if (location.state?.tasks) {
-        setScheduledTasks(syncScheduleFromTasks(location.state.tasks));
-      } else {
-        // fallback: construct schedule from taskDetails
-        const fallbackSchedule = syncScheduleFromTasks(taskDetails);
-        setScheduledTasks(fallbackSchedule);
-      }
-    })
-    .catch(err => console.error("Failed to load tasks and habits:", err));
-}, []);
+          const parsed = JSON.parse(saved);
+          if (parsed.scheduledTasks) setScheduledTasks(parsed.scheduledTasks);
+          if (parsed.habitClones) setHabitClones(parsed.habitClones);
+        } else {
+          // fallback: construct schedule from tasks
+          const initialSchedule = {};
+          taskDetails.forEach(task => {
+            if (task.scheduledTime) {
+              if (!initialSchedule[task.scheduledTime]) initialSchedule[task.scheduledTime] = [];
+              initialSchedule[task.scheduledTime].push(String(task.id));
+            }
+          });
+          setScheduledTasks(initialSchedule);
+        }
+      })
+      .catch(err => console.error("Failed to load tasks and habits:", err));
+  }, []);
 
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.HabitDTO;
+import com.example.demo.dto.HabitScheduleDTO;
 import com.example.demo.entity.Habit;
 import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
