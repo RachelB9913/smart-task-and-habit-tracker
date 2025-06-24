@@ -260,32 +260,20 @@ export default function SchedulePlanner() {
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    const scheduled = isScheduled(task.id);
-
-                    if (scheduled) {
-                      return (
-                        <li key={task.id} className="task-item grayed-out">
+                  {tasks .filter((task) => !isScheduled(task.id)) .map((task, index) => (
+                    <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+                      {(provided) => (
+                        <li
+                          className={`task-item ${isScheduled(task.id) ? "grayed-out" : ""}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
                           {task.title}
                         </li>
-                      );
-                    }
-
-                    return (
-                      <Draggable draggableId={String(task.id)} index={index} key={task.id}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {task.title}
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </ul>
               )}

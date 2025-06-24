@@ -188,6 +188,7 @@ export default function SchedulePlanner() {
       const currentValues = Array.isArray(slotItems) ? slotItems : [slotItems];
       updated[destination.droppableId] = [...currentValues, draggableId];
 
+      // Schedule tasks (not habits)
       if (!draggableId.startsWith("habit-")) {
         fetch(`http://localhost:8080/api/tasks/${draggableId}/schedule`, {
           method: "PUT",
@@ -222,6 +223,7 @@ export default function SchedulePlanner() {
         )
       );
 
+      // Clear from frontend memory and state
       setScheduledTasks({});
       setHabitClones([]);
       setTasks(prev => prev.map(task => ({
@@ -260,32 +262,20 @@ export default function SchedulePlanner() {
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    const scheduled = isScheduled(task.id);
-
-                    if (scheduled) {
-                      return (
-                        <li key={task.id} className="task-item grayed-out">
+                  {tasks.map((task, index) => (
+                    <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+                      {(provided) => (
+                        <li
+                          className={`task-item ${isScheduled(task.id) ? "grayed-out" : ""}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
                           {task.title}
                         </li>
-                      );
-                    }
-
-                    return (
-                      <Draggable draggableId={String(task.id)} index={index} key={task.id}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {task.title}
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </ul>
               )}

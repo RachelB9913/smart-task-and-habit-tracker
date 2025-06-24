@@ -257,6 +257,27 @@ export default function SchedulePlanner() {
               <button className="save-button" onClick={cleanSchedule}>🧹 Clean Schedule</button>
             </div>
             <h3>Tasks</h3>
+            {/* <Droppable droppableId="taskList">
+              {(provided) => (
+                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                  {tasks .filter((task) => !isScheduled(task.id)) .map((task, index) => (
+                    <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+                      {(provided) => (
+                        <li
+                          className={`task-item ${isScheduled(task.id) ? "grayed-out" : ""}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {task.title}
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable> */}
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>

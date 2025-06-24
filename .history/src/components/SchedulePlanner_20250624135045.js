@@ -260,32 +260,20 @@ export default function SchedulePlanner() {
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    const scheduled = isScheduled(task.id);
-
-                    if (scheduled) {
-                      return (
-                        <li key={task.id} className="task-item grayed-out">
+                  {tasks.map((task, index) => (
+                    <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+                      {(provided) => (
+                        <li
+                          className={`task-item ${isScheduled(task.id) ? "grayed-out" : ""}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
                           {task.title}
                         </li>
-                      );
-                    }
-
-                    return (
-                      <Draggable draggableId={String(task.id)} index={index} key={task.id}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {task.title}
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </ul>
               )}
@@ -460,7 +448,7 @@ export default function SchedulePlanner() {
                                                     .catch((err) => console.error("❌ Failed to mark done:", err));
                                                 }}
                                               >✅</button>
-                                              <button
+                                              {/* <button
                                                 className="remove-btn"
                                                 onClick={(e) => {
                                                   e.stopPropagation();
@@ -478,7 +466,45 @@ export default function SchedulePlanner() {
                                                     .then((data) => console.log("🗑️ Unschedule successful:", data))
                                                     .catch((err) => console.error("❌ Error unscheduling task:", err));
                                                 }}
-                                              >❌</button>
+                                              >❌</button> */}
+                                              <button
+                                                className="remove-btn"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+
+                                                  // ✅ Remove from slot and clean up empty arrays
+                                                  setScheduledTasks((prev) => {
+                                                    const updated = { ...prev };
+                                                    updated[slotId] = updated[slotId].filter(val => val !== String(task.id));
+                                                    if (updated[slotId].length === 0) {
+                                                      delete updated[slotId]; // ⬅️ remove empty slot entirely
+                                                    }
+                                                    return updated;
+                                                  });
+
+                                                  // ✅ Also clear it in the backend
+                                                  fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
+                                                    method: "PUT",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify({ scheduledTime: null }),
+                                                  })
+                                                    .then((res) => res.json())
+                                                    .then((data) => {
+                                                      console.log("🗑️ Unschedule successful:", data);
+                                                      // ✅ Also update the local task state so React sees it
+                                                      setTasks((prev) =>
+                                                        prev.map((t) =>
+                                                          t.id === task.id ? { ...t, scheduledTime: null } : t
+                                                        )
+                                                      );
+                                                    })
+                                                    .catch((err) =>
+                                                      console.error("❌ Error unscheduling task:", err)
+                                                    );
+                                                }}
+                                              >
+                                                ❌
+                                              </button>
                                             </>
                                           )}
                                         </div>

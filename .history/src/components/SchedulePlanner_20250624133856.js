@@ -115,10 +115,81 @@ export default function SchedulePlanner() {
     alert("✅ Schedule saved locally!");
   };
 
+  // useEffect(() => {
+  //   const saved = localStorage.getItem("savedSchedule");
+  //   if (saved) {
+  //     const parsed = JSON.parse(saved);
+  //     if (parsed.scheduledTasks) setScheduledTasks(parsed.scheduledTasks);
+  //     if (parsed.habitClones) setHabitClones(parsed.habitClones);
+  //   }
+  // }, []);
+
+  //   const habitSchedules = [];
+  //   Object.entries(scheduledTasks).forEach(([slot, ids]) => {
+  //     const [day, time] = slot.split("-");
+  //     const items = Array.isArray(ids) ? ids : [ids];
+  //     items.forEach(id => {
+  //       if (id.startsWith("habit-")) {
+  //         const habitId = id.replace("habit-", "");
+  //         habitSchedules.push({ habitId, day, time });
+  //       }
+  //     });
+  //   });
+
+  //   fetch("http://localhost:8080/api/habits/schedule", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(habitSchedules),
+  //   }).then(res => res.json())
+  //     .then(data => console.log("✅ Habits saved", data))
+  //     .catch(err => console.error("❌ Failed to save habits:", err));
+  // };
+
   const handleAutoPlace = () => {
     const updatedSchedule = autoPlaceHabits(habits, scheduledTasks, tasks, setHabitClones);
     setScheduledTasks(updatedSchedule);
   };
+
+  // useEffect(() => {
+  //   const saved = localStorage.getItem("savedSchedule");
+  //   if (saved) setScheduledTasks(JSON.parse(saved));
+  // }, []);
+
+  // useEffect(() => {
+  //   const userId = localStorage.getItem("userId");
+  //   if (!userId) return;
+
+  //   fetch(`http://localhost:8080/api/users/${userId}`)
+  //     .then(res => res.json())
+  //     .then(async (userData) => {
+  //       const taskDetails = await Promise.all(
+  //         (userData.taskIds || []).map(id =>
+  //           fetch(`http://localhost:8080/api/tasks/${id}`).then(res => res.json())
+  //         )
+  //       );
+  //       setTasks(taskDetails);
+
+  //       // Load localStorage schedule if exists
+  //       const savedSchedule = localStorage.getItem("savedSchedule");
+  //       if (savedSchedule) {
+  //         setScheduledTasks(JSON.parse(savedSchedule));
+  //       } else {
+  //         // Otherwise generate schedule from task.scheduledTime
+  //         const initialSchedule = {};
+  //         taskDetails.forEach(task => {
+  //           if (task.scheduledTime) {
+  //             if (!initialSchedule[task.scheduledTime]) initialSchedule[task.scheduledTime] = [];
+  //             if (!Array.isArray(initialSchedule[task.scheduledTime])) {
+  //               initialSchedule[task.scheduledTime] = [initialSchedule[task.scheduledTime]];
+  //             }
+  //             initialSchedule[task.scheduledTime].push(String(task.id));
+  //           }
+  //         });
+  //         setScheduledTasks(initialSchedule);
+  //       }
+  //     })
+  //     .catch(err => console.error("Failed to load tasks:", err));
+  // }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -188,6 +259,7 @@ export default function SchedulePlanner() {
       const currentValues = Array.isArray(slotItems) ? slotItems : [slotItems];
       updated[destination.droppableId] = [...currentValues, draggableId];
 
+      // Schedule tasks (not habits)
       if (!draggableId.startsWith("habit-")) {
         fetch(`http://localhost:8080/api/tasks/${draggableId}/schedule`, {
           method: "PUT",
@@ -222,6 +294,7 @@ export default function SchedulePlanner() {
         )
       );
 
+      // Clear from frontend memory and state
       setScheduledTasks({});
       setHabitClones([]);
       setTasks(prev => prev.map(task => ({
@@ -260,32 +333,20 @@ export default function SchedulePlanner() {
             <Droppable droppableId="taskList">
               {(provided) => (
                 <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks.map((task, index) => {
-                    const scheduled = isScheduled(task.id);
-
-                    if (scheduled) {
-                      return (
-                        <li key={task.id} className="task-item grayed-out">
+                  {tasks.map((task, index) => (
+                    <Draggable draggableId={String(task.id)} index={index} key={task.id}>
+                      {(provided) => (
+                        <li
+                          className={`task-item ${isScheduled(task.id) ? "grayed-out" : ""}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
                           {task.title}
                         </li>
-                      );
-                    }
-
-                    return (
-                      <Draggable draggableId={String(task.id)} index={index} key={task.id}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {task.title}
-                          </li>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </ul>
               )}
@@ -311,6 +372,22 @@ export default function SchedulePlanner() {
                   {habitClones.map((clone, index) => {
                     const habit = habits.find(h => String(h.id) === String(clone.habitId));
                     if (!habit) return null;
+                    
+                    // Uncomment this block if you want to display cloned habits in the sidebar
+                    // return (
+                    //   <Draggable draggableId={clone.id} index={index + 1000} key={clone.id}>
+                    //     {(provided) => (
+                    //       <li
+                    //         className="task-item"
+                    //         ref={provided.innerRef}
+                    //         {...provided.draggableProps}
+                    //         {...provided.dragHandleProps}
+                    //       >
+                    //         {habit.title}
+                    //       </li>
+                    //     )}
+                    //   </Draggable>
+                    // );
                   })}
                   {provided.placeholder}
                 </ul>
@@ -418,6 +495,9 @@ export default function SchedulePlanner() {
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
                                                 updated[slotId] = updated[slotId].filter(val => val !== id);
+                                                if (updated[slotId].length === 0) {
+                                                  delete updated[slotId];
+                                                }
                                                 return updated;
                                               });
                                             }}
@@ -474,9 +554,14 @@ export default function SchedulePlanner() {
                                                     headers: { "Content-Type": "application/json" },
                                                     body: JSON.stringify({ scheduledTime: null }),
                                                   })
-                                                    .then((res) => res.json())
-                                                    .then((data) => console.log("🗑️ Unschedule successful:", data))
-                                                    .catch((err) => console.error("❌ Error unscheduling task:", err));
+                                                  .then((res) => res.json())
+                                                  .then((data) => {
+                                                    console.log("🗑️ Unschedule successful:", data);
+                                                    // 🛠️ Also update local task copy to reflect the removal
+                                                    setTasks(prev => prev.map(t =>
+                                                      t.id === task.id ? { ...t, scheduledTime: null } : t
+                                                    ));
+                                                  })
                                                 }}
                                               >❌</button>
                                             </>
