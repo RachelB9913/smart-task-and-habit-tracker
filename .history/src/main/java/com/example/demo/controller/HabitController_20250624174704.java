@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/habits") // This must match what you're calling in Postman
+@RequestMapping("/api/habits") // ✅ This must match what you're calling in Postman
 public class HabitController {
 
     @Autowired
@@ -28,12 +28,12 @@ public class HabitController {
     private UserRepository userRepository;
 
     public HabitController() {
-        System.out.println("abitController has been loaded!"); 
+        System.out.println("✅✅✅ HabitController has been loaded!"); 
     }
 
     @PostMapping
     public HabitDTO createHabit(@RequestBody HabitDTO dto) {
-        System.out.println("HabitController POST hit");
+        System.out.println("✅ HabitController POST hit");
 
         Habit habit = new Habit();
         habit.setId(dto.getId()); 

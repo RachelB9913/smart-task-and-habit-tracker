@@ -128,8 +128,7 @@
 }
 
 .done-task {
-  background-color: #90ee90 !important; /* light green for done tasks */
-  border: 1px solid #3dbd19 !important; 
+  background-color: #90ee90; /* light green for done tasks */
 }
 
 .remove-btn {
@@ -175,7 +174,8 @@
   color: green;
   font-size: 1rem;
   cursor: pointer;
-
+  margin-left: 0.2rem;
+  margin-right: 0rem;
 }
 
 .vertical-buttons {
@@ -193,6 +193,8 @@
   border: none;
   font-size: 1rem;
   cursor: pointer;
+  margin-left: 0rem;
+  margin-right: 0rem;
 }
 
   

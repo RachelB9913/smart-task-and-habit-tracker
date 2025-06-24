@@ -143,10 +143,6 @@ export default function SchedulePlanner() {
   const [scheduledTasks, setScheduledTasks] = useState({});
   const [habitClones, setHabitClones] = useState([]); // [{ id: 'habit-1-copy-1', habitId: 1 }]
 
-  const [completedHabitIds, setCompletedHabitIds] = useState(() => {
-    const stored = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
-    return stored.map(entry => entry.cloneId); // ✅ Use cloneId, not habitId
-  });
   
   const saveSchedule = () => {
     const scheduleData = {
@@ -401,7 +397,7 @@ export default function SchedulePlanner() {
                                   <Draggable draggableId={id} index={i} key={`${id}-${i}`}>
                                     {(provided) => (
                                       <div
-                                        className={`scheduled-task habit-task ${completedHabitIds.includes(id) ? "done-task" : ""}`}
+                                        className="scheduled-task habit-task"
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
@@ -412,28 +408,19 @@ export default function SchedulePlanner() {
                                             className="mark-done-btn"
                                             onClick={(e) => {
                                               e.stopPropagation();
-
-                                              const completions = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
-
-                                              if (completedHabitIds.includes(id)) {
-                                                // Undo
-                                                const updated = completions.filter(entry => entry.cloneId !== id);
-                                                localStorage.setItem("habitCompletions", JSON.stringify(updated));
-                                                setCompletedHabitIds(prev => prev.filter(x => x !== id));
-                                              } else {
-                                                // Mark as done
-                                                const updated = [...completions, {
-                                                  cloneId: id,
-                                                  habitId: habit.id,
-                                                  completedAt: new Date().toISOString()
-                                                }];
-                                                localStorage.setItem("habitCompletions", JSON.stringify(updated));
-                                                setCompletedHabitIds(prev => [...prev, id]);
-                                              }
+                                              fetch(`http://localhost:8080/api/habits/${habit.id}/status`, {
+                                                method: "PATCH",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({ status: "Done" }),
+                                              })
+                                                .then((res) => res.text())
+                                                .then(() => {
+                                                  habit.status = "Done";
+                                                  setScheduledTasks((prev) => ({ ...prev }));
+                                                })
+                                                .catch((err) => console.error("❌ Failed to mark done:", err));
                                             }}
-                                          >
-                                            {completedHabitIds.includes(id) ? "↩️" : "✅"}
-                                          </button>
+                                          >✅</button>
                                           <button
                                             className="duplicate-btn"
                                             onClick={(e) => {

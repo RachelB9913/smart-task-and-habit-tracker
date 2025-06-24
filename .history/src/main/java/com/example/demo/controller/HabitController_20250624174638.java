@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.HabitDTO;
+import com.example.demo.dto.TaskDTO;
 import com.example.demo.entity.Habit;
+import com.example.demo.entity.Task;
 import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.demo.entity.User;
 import com.example.demo.mapper.HabitMapper;
+import com.example.demo.mapper.TaskMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/habits") // This must match what you're calling in Postman
+@RequestMapping("/api/habits") // ✅ This must match what you're calling in Postman
 public class HabitController {
 
     @Autowired
@@ -28,12 +31,12 @@ public class HabitController {
     private UserRepository userRepository;
 
     public HabitController() {
-        System.out.println("abitController has been loaded!"); 
+        System.out.println("✅✅✅ HabitController has been loaded!"); 
     }
 
     @PostMapping
     public HabitDTO createHabit(@RequestBody HabitDTO dto) {
-        System.out.println("HabitController POST hit");
+        System.out.println("✅ HabitController POST hit");
 
         Habit habit = new Habit();
         habit.setId(dto.getId()); 

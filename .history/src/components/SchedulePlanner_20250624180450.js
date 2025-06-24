@@ -401,39 +401,29 @@ export default function SchedulePlanner() {
                                   <Draggable draggableId={id} index={i} key={`${id}-${i}`}>
                                     {(provided) => (
                                       <div
-                                        className={`scheduled-task habit-task ${completedHabitIds.includes(id) ? "done-task" : ""}`}
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                      >
+                                        className={`scheduled-task habit-task ${completedHabitIds.includes(id) ? "done-task" : ""}`}> 
                                         <span>{habit.title}</span>
                                         <div className="habit-icons">
-                                          <button
-                                            className="mark-done-btn"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
+                                          {!completedHabitIds.includes(id) && (
+                                            <button
+                                              className="mark-done-btn"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
 
-                                              const completions = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
-
-                                              if (completedHabitIds.includes(id)) {
-                                                // Undo
-                                                const updated = completions.filter(entry => entry.cloneId !== id);
-                                                localStorage.setItem("habitCompletions", JSON.stringify(updated));
-                                                setCompletedHabitIds(prev => prev.filter(x => x !== id));
-                                              } else {
-                                                // Mark as done
-                                                const updated = [...completions, {
+                                                // Save to localStorage by cloneId
+                                                const completions = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
+                                                completions.push({
                                                   cloneId: id,
                                                   habitId: habit.id,
                                                   completedAt: new Date().toISOString()
-                                                }];
-                                                localStorage.setItem("habitCompletions", JSON.stringify(updated));
+                                                });
+                                                localStorage.setItem("habitCompletions", JSON.stringify(completions));
+
+                                                // Update UI state
                                                 setCompletedHabitIds(prev => [...prev, id]);
-                                              }
-                                            }}
-                                          >
-                                            {completedHabitIds.includes(id) ? "↩️" : "✅"}
-                                          </button>
+                                              }}
+                                            >✅</button>
+                                          )}
                                           <button
                                             className="duplicate-btn"
                                             onClick={(e) => {

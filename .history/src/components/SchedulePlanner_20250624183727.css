@@ -129,7 +129,7 @@
 
 .done-task {
   background-color: #90ee90 !important; /* light green for done tasks */
-  border: 1px solid #3dbd19 !important; 
+  border: 1px solid #3dbd19;
 }
 
 .remove-btn {
