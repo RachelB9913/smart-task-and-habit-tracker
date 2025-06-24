@@ -349,6 +349,20 @@ export default function SchedulePlanner() {
                   {habitClones.map((clone, index) => {
                     const habit = habits.find(h => String(h.id) === String(clone.habitId));
                     if (!habit) return null;
+                    // return (
+                    //   <Draggable draggableId={clone.id} index={index + 1000} key={clone.id}>
+                    //     {(provided) => (
+                    //       <li
+                    //         className="task-item"
+                    //         ref={provided.innerRef}
+                    //         {...provided.draggableProps}
+                    //         {...provided.dragHandleProps}
+                    //       >
+                    //         {habit.title}
+                    //       </li>
+                    //     )}
+                    //   </Draggable>
+                    // );
                   })}
                   {provided.placeholder}
                 </ul>
@@ -382,7 +396,7 @@ export default function SchedulePlanner() {
                             {items.map((id, i) => {
                               if (id.startsWith("habit-")) {
                                 let habit;
-                                if (id.includes("-copy-") || id.includes("-clone-")) {
+                                if (id.includes("-clone-")) {
                                   const clone = habitClones.find(cl => cl.id === id);
                                   if (!clone) return null;
                                   habit = habits.find(h => String(h.id) === String(clone.habitId));
@@ -393,16 +407,16 @@ export default function SchedulePlanner() {
 
                                 if (!habit) return null;
 
-                                return (
-                                  <Draggable draggableId={id} index={i} key={`${id}-${i}`}>
-                                    {(provided) => (
-                                      <div
-                                        className="scheduled-task habit-task"
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                      >
-                                        <span>{habit.title}</span>
+                               return (
+                                <Draggable draggableId={id} index={i} key={`${id}-${i}`}>
+                                  {(provided) => (
+                                    <div
+                                      className="scheduled-task habit-task"
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      <span>{habit.title}</span>
                                         <div className="habit-icons">
                                           <button
                                             className="duplicate-btn"
@@ -441,12 +455,12 @@ export default function SchedulePlanner() {
                                               const fallbackSlot = `${currentDay}-${Math.min(currentHour + 1, 23)}:00`; // safe upper bound
                                               const slotToUse = targetSlot || fallbackSlot;
 
-                                              console.log("➕ Creating clone for:", habit.title, "→", newId, "in", slotToUse); // ✅ now safe
+                                              console.log("➕ Creating clone for:", habit.title, "→", newId, "in", slotToUse);
 
                                               // Add the clone
                                               setHabitClones((prev) => [...prev, { id: newId, habitId: habit.id }]);
 
-                                              //Place the clone in the schedule
+                                              // Place the clone in the schedule
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
                                                 if (!updated[slotToUse]) updated[slotToUse] = [];

@@ -382,7 +382,7 @@ export default function SchedulePlanner() {
                             {items.map((id, i) => {
                               if (id.startsWith("habit-")) {
                                 let habit;
-                                if (id.includes("-copy-") || id.includes("-clone-")) {
+                                if (id.includes("-clone-")) {
                                   const clone = habitClones.find(cl => cl.id === id);
                                   if (!clone) return null;
                                   habit = habits.find(h => String(h.id) === String(clone.habitId));

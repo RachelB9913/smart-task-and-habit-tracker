@@ -382,7 +382,7 @@ export default function SchedulePlanner() {
                             {items.map((id, i) => {
                               if (id.startsWith("habit-")) {
                                 let habit;
-                                if (id.includes("-copy-") || id.includes("-clone-")) {
+                                if (id.includes("-clone-")) {
                                   const clone = habitClones.find(cl => cl.id === id);
                                   if (!clone) return null;
                                   habit = habits.find(h => String(h.id) === String(clone.habitId));
@@ -390,7 +390,7 @@ export default function SchedulePlanner() {
                                   const habitId = id.replace("habit-", "");
                                   habit = habits.find(h => String(h.id) === habitId);
                                 }
-
+                                
                                 if (!habit) return null;
 
                                 return (
@@ -408,8 +408,10 @@ export default function SchedulePlanner() {
                                             className="duplicate-btn"
                                             onClick={(e) => {
                                               e.stopPropagation();
-
                                               const newId = `habit-${habit.id}-copy-${Date.now()}`;
+                                              setHabitClones((prev) => [...prev, { id: newId, habitId: habit.id }]);
+
+                                              // Try to place near the current cell
                                               const [currentDay, currentHourStr] = slotId.split("-");
                                               const currentHour = parseInt(currentHourStr.split(":")[0], 10);
                                               const nearbySlots = [];
@@ -439,14 +441,9 @@ export default function SchedulePlanner() {
                                               });
 
                                               const fallbackSlot = `${currentDay}-${Math.min(currentHour + 1, 23)}:00`; // safe upper bound
+
                                               const slotToUse = targetSlot || fallbackSlot;
 
-                                              console.log("➕ Creating clone for:", habit.title, "→", newId, "in", slotToUse); // ✅ now safe
-
-                                              // Add the clone
-                                              setHabitClones((prev) => [...prev, { id: newId, habitId: habit.id }]);
-
-                                              //Place the clone in the schedule
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
                                                 if (!updated[slotToUse]) updated[slotToUse] = [];
