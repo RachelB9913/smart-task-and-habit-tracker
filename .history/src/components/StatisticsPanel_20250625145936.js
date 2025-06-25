@@ -66,14 +66,13 @@ function getProgressColor(ratio) {
       <svg>
         <circle className="stat-bg" cx="70" cy="70" r="60" />
         <circle
-            className="stat-fill"
-            cx="70"
-            cy="70"
-            r="60"
-            stroke={getProgressColor(taskStats.week / taskStats.total || 0)}
-            strokeDasharray={2 * Math.PI * 60}
-            strokeDashoffset={(1 - (taskStats.week / taskStats.total || 0)) * 2 * Math.PI * 60}
-            />
+          className="stat-fill"
+          cx="70"
+          cy="70"
+          r="60"
+          strokeDasharray={2 * Math.PI * 60}
+          strokeDashoffset={(1 - taskStats.week / taskStats.total || 0) * 2 * Math.PI * 60}
+        />
       </svg>
       <div className="stat-label">
         <div>Tasks</div>
@@ -85,14 +84,13 @@ function getProgressColor(ratio) {
       <svg>
         <circle className="stat-bg" cx="70" cy="70" r="60" />
         <circle
-            className="stat-fill"
-            cx="70"
-            cy="70"
-            r="60"
-            stroke={getProgressColor(habitStats.week / habitStats.total || 0)}
-            strokeDasharray={2 * Math.PI * 60}
-            strokeDashoffset={(1 - (habitStats.week / habitStats.total || 0)) * 2 * Math.PI * 60}
-            />
+          className="stat-fill"
+          cx="70"
+          cy="70"
+          r="60"
+          strokeDasharray={2 * Math.PI * 60}
+          strokeDashoffset={(1 - habitStats.week / habitStats.total || 0) * 2 * Math.PI * 60}
+        />
       </svg>
       <div className="stat-label">
         <div>Habits</div>

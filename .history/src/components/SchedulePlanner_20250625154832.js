@@ -296,19 +296,9 @@ export default function SchedulePlanner() {
       )
     );
 
-    await Promise.all(
-    tasks.map(task =>
-      fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "In Progress" })
-      })
-    )
-  );
-
     setScheduledTasks({});
     setHabitClones([]);
-    setTasks(prev => prev.map(task => ({ ...task, scheduledTime: null, status: "In Progress" })));
+    setTasks(prev => prev.map(task => ({ ...task, scheduledTime: null })));
     localStorage.removeItem("savedSchedule");
     localStorage.removeItem("scheduledItems");
 
@@ -524,7 +514,7 @@ export default function SchedulePlanner() {
                                               scheduled.push({ id: newId, type: "habit", scheduledAt: new Date().toISOString() });
                                               localStorage.setItem("scheduledItems", JSON.stringify(scheduled));
                                               window.dispatchEvent(new Event("storage-updated"));
-
+                                              
                                               //Place the clone in the schedule
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };

@@ -89,9 +89,9 @@ function getProgressColor(ratio) {
             cx="70"
             cy="70"
             r="60"
-            stroke={getProgressColor(habitStats.week / habitStats.total || 0)}
+            stroke={getProgressColor(taskStats.week / taskStats.total || 0)}
             strokeDasharray={2 * Math.PI * 60}
-            strokeDashoffset={(1 - (habitStats.week / habitStats.total || 0)) * 2 * Math.PI * 60}
+            strokeDashoffset={(1 - (taskStats.week / taskStats.total || 0)) * 2 * Math.PI * 60}
             />
       </svg>
       <div className="stat-label">

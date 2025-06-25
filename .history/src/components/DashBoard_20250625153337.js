@@ -58,32 +58,31 @@ export default function Dashboard() {
         setTasks(prev => prev.map(t => t.id === saved.id ? saved : t));
       } else {
         setTasks([...tasks, saved]);
-      }
 
-      // Track if it's scheduled
-      if (saved.scheduledTime) {
-        const scheduled = JSON.parse(localStorage.getItem("scheduledItems") || "[]");
-        const exists = scheduled.some(item => item.id === String(saved.id));
-        if (!exists) {
-          scheduled.push({ id: String(saved.id), type: "task", scheduledAt: new Date().toISOString() });
-          localStorage.setItem("scheduledItems", JSON.stringify(scheduled));
-          window.dispatchEvent(new Event("storage-updated"));
+        // Always add to scheduledItems if scheduledTime is set (regardless of status)
+        if (saved.scheduledTime) {
+          const scheduled = JSON.parse(localStorage.getItem("scheduledItems") || "[]");
+          const exists = scheduled.some(item => item.id === String(saved.id));
+          if (!exists) {
+            scheduled.push({ id: String(saved.id), type: "task", scheduledAt: new Date().toISOString() });
+            localStorage.setItem("scheduledItems", JSON.stringify(scheduled));
+            window.dispatchEvent(new Event("storage-updated"));
+          }
+        }
+
+        // If the new task is already completed, also add to taskCompletions
+        if (saved.status === "Done" && saved.scheduledTime) {
+          const completions = JSON.parse(localStorage.getItem("taskCompletions") || "[]");
+          const alreadyDone = completions.some(entry => entry.taskId === saved.id);
+          if (!alreadyDone) {
+            completions.push({ taskId: saved.id, completedAt: new Date().toISOString() });
+            localStorage.setItem("taskCompletions", JSON.stringify(completions));
+            window.dispatchEvent(new Event("storage-updated"));
+          }
         }
       }
 
-      // Track if it's completed
-      if (saved.status === "Done") {
-        const completions = JSON.parse(localStorage.getItem("taskCompletions") || "[]");
-        const already = completions.some(entry => entry.taskId === saved.id);
-        if (!already) {
-          completions.push({ taskId: saved.id, completedAt: new Date().toISOString() });
-          localStorage.setItem("taskCompletions", JSON.stringify(completions));
-          window.dispatchEvent(new Event("storage-updated"));
-        }
-      }
-
-      // Reset form
-      setNewTask({ title: "", description: "", scheduledTime: "", status: "" });
+      setNewTask({ title: "", description: "", scheduledTime: "", status: ""});
       setEditingTaskId(null);
       setShowTaskForm(false);
     } catch (err) {

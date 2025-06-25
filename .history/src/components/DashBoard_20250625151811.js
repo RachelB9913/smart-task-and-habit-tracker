@@ -60,30 +60,7 @@ export default function Dashboard() {
         setTasks([...tasks, saved]);
       }
 
-      // Track if it's scheduled
-      if (saved.scheduledTime) {
-        const scheduled = JSON.parse(localStorage.getItem("scheduledItems") || "[]");
-        const exists = scheduled.some(item => item.id === String(saved.id));
-        if (!exists) {
-          scheduled.push({ id: String(saved.id), type: "task", scheduledAt: new Date().toISOString() });
-          localStorage.setItem("scheduledItems", JSON.stringify(scheduled));
-          window.dispatchEvent(new Event("storage-updated"));
-        }
-      }
-
-      // Track if it's completed
-      if (saved.status === "Done") {
-        const completions = JSON.parse(localStorage.getItem("taskCompletions") || "[]");
-        const already = completions.some(entry => entry.taskId === saved.id);
-        if (!already) {
-          completions.push({ taskId: saved.id, completedAt: new Date().toISOString() });
-          localStorage.setItem("taskCompletions", JSON.stringify(completions));
-          window.dispatchEvent(new Event("storage-updated"));
-        }
-      }
-
-      // Reset form
-      setNewTask({ title: "", description: "", scheduledTime: "", status: "" });
+      setNewTask({ title: "", description: "", scheduledTime: "", status: ""});
       setEditingTaskId(null);
       setShowTaskForm(false);
     } catch (err) {
@@ -125,25 +102,6 @@ export default function Dashboard() {
           )
         );
         setTasks(taskDetails);
-        
-        const scheduled = JSON.parse(localStorage.getItem("scheduledItems") || "[]");
-        const now = new Date().toISOString();
-        let changed = false;
-
-        taskDetails.forEach(task => {
-          if (task.scheduledTime) {
-            const exists = scheduled.some(item => item.id === String(task.id));
-            if (!exists) {
-              scheduled.push({ id: String(task.id), type: "task", scheduledAt: now });
-              changed = true;
-            }
-          }
-        });
-
-        if (changed) {
-          localStorage.setItem("scheduledItems", JSON.stringify(scheduled));
-          window.dispatchEvent(new Event("storage-updated"));
-        }
 
         // Fetch full habit objects
         const habitDetails = await Promise.all(
