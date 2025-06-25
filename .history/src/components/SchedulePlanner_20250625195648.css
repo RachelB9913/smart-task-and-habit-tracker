@@ -13,18 +13,19 @@
   border-radius: 16px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-style: italic;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 85px;
+  min-height: 120px;
   width: 100%;
   max-width: 220px;
 }
 
 .quote-panel:hover {
-  color: #1f16cd;
+  background-color: #f8e6ff;
+  cursor: pointer;
 }
 
 .stats-wrapper .stats-panel {

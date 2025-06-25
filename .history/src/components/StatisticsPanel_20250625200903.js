@@ -69,7 +69,7 @@ export default function StatisticsPanel() {
         confetti({
         particleCount: 300,
         spread: 50,
-        origin: { x:0.87, y: 0.65},
+        origin: { x:0.9, y: 0.4 },
         });
     };
 

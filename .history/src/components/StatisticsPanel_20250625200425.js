@@ -68,8 +68,8 @@ export default function StatisticsPanel() {
     const fireConfetti = (x) => {
         confetti({
         particleCount: 300,
-        spread: 50,
-        origin: { x:0.87, y: 0.65},
+        spread: 70,
+        origin: { x, y: 0.2 },
         });
     };
 
