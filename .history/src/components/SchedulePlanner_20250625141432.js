@@ -92,11 +92,6 @@ function autoPlaceHabits(habits, currentSchedule, tasks, setHabitClones) {
           const cloneId = `habit-${habit.id}-clone-${Date.now()}-${Math.random().toString(36).slice(2)}`;
           if (!newSchedule[slotKey]) newSchedule[slotKey] = [];
           newSchedule[slotKey].push(cloneId);
-          localStorage.setItem("scheduledItems", JSON.stringify([
-            ...JSON.parse(localStorage.getItem("scheduledItems") || "[]"),
-            { id: cloneId, type: "habit", scheduledAt: new Date().toISOString() }
-          ]));
-          window.dispatchEvent(new Event("storage-updated"));
           newClones.push({ id: cloneId, habitId: habit.id });
           placed = true;
         }
@@ -152,12 +147,7 @@ function updateScheduledCount(id, type, action) {
 
   let updated;
   if (action === "add") {
-    const alreadyExists = stored.some(entry => entry.id === id);
-    if (!alreadyExists) {
-      updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
-    } else {
-      updated = stored; // no change
-    }
+    updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
   } else if (action === "remove") {
     updated = stored.filter(item => item.id !== id);
   }

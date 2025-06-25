@@ -152,12 +152,7 @@ function updateScheduledCount(id, type, action) {
 
   let updated;
   if (action === "add") {
-    const alreadyExists = stored.some(entry => entry.id === id);
-    if (!alreadyExists) {
-      updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
-    } else {
-      updated = stored; // no change
-    }
+    updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
   } else if (action === "remove") {
     updated = stored.filter(item => item.id !== id);
   }
@@ -558,7 +553,7 @@ export default function SchedulePlanner() {
                                                 className="mark-done-btn"
                                                 onClick={(e) => {
                                                   e.stopPropagation();
-                                                  updateScheduledCount(id, "task", "add");
+                                                  // updateScheduledCount(id, "task", "add");
                                                   fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
                                                     method: "PATCH",
                                                     headers: { "Content-Type": "application/json" },

@@ -141,29 +141,6 @@ export default function Dashboard() {
       prev.map(task => task.id === updated.id ? updated : task)
     );
 
-    // Update localStorage for StatisticsPanel
-    if (newStatus === "Done") {
-      const completions = JSON.parse(localStorage.getItem("taskCompletions") || "[]");
-      const alreadyRecorded = completions.some(entry => entry.taskId === taskId);
-      if (!alreadyRecorded) {
-        const updatedCompletions = [
-          ...completions,
-          {
-            taskId: taskId,
-            completedAt: new Date().toISOString(),
-          },
-        ];
-        localStorage.setItem("taskCompletions", JSON.stringify(updatedCompletions));
-        window.dispatchEvent(new Event("storage-updated")); // Refresh StatisticsPanel
-      }
-    } else {
-      // If user unchecks a completed task
-      const completions = JSON.parse(localStorage.getItem("taskCompletions") || "[]");
-      const filtered = completions.filter(entry => entry.taskId !== taskId);
-      localStorage.setItem("taskCompletions", JSON.stringify(filtered));
-      window.dispatchEvent(new Event("storage-updated"));
-    }
-
   } catch (error) {
       console.error("Error toggling task status:", error);
       alert("Failed to update task status. Please try again.");

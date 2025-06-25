@@ -152,12 +152,7 @@ function updateScheduledCount(id, type, action) {
 
   let updated;
   if (action === "add") {
-    const alreadyExists = stored.some(entry => entry.id === id);
-    if (!alreadyExists) {
-      updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
-    } else {
-      updated = stored; // no change
-    }
+    updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
   } else if (action === "remove") {
     updated = stored.filter(item => item.id !== id);
   }

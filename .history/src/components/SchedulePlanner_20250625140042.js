@@ -92,11 +92,6 @@ function autoPlaceHabits(habits, currentSchedule, tasks, setHabitClones) {
           const cloneId = `habit-${habit.id}-clone-${Date.now()}-${Math.random().toString(36).slice(2)}`;
           if (!newSchedule[slotKey]) newSchedule[slotKey] = [];
           newSchedule[slotKey].push(cloneId);
-          localStorage.setItem("scheduledItems", JSON.stringify([
-            ...JSON.parse(localStorage.getItem("scheduledItems") || "[]"),
-            { id: cloneId, type: "habit", scheduledAt: new Date().toISOString() }
-          ]));
-          window.dispatchEvent(new Event("storage-updated"));
           newClones.push({ id: cloneId, habitId: habit.id });
           placed = true;
         }
@@ -152,12 +147,7 @@ function updateScheduledCount(id, type, action) {
 
   let updated;
   if (action === "add") {
-    const alreadyExists = stored.some(entry => entry.id === id);
-    if (!alreadyExists) {
-      updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
-    } else {
-      updated = stored; // no change
-    }
+    updated = [...stored, { id, type, scheduledAt: new Date().toISOString() }];
   } else if (action === "remove") {
     updated = stored.filter(item => item.id !== id);
   }
@@ -176,7 +166,7 @@ export default function SchedulePlanner() {
 
   const [completedHabitIds, setCompletedHabitIds] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
-    return stored.map(entry => entry.cloneId); // Use cloneId, not habitId
+    return stored.map(entry => entry.cloneId); // ✅ Use cloneId, not habitId
   });
   
   const saveSchedule = () => {
@@ -302,7 +292,7 @@ export default function SchedulePlanner() {
     localStorage.removeItem("savedSchedule");
     localStorage.removeItem("scheduledItems");
 
-    // Also clear completions
+    // ✅ Also clear completions
     localStorage.removeItem("taskCompletions");
     localStorage.removeItem("habitCompletions");
     window.dispatchEvent(new Event("storage-updated")); // trigger stat refresh
@@ -449,7 +439,7 @@ export default function SchedulePlanner() {
                                               e.stopPropagation();
 
                                               const completions = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
-                                              updateScheduledCount(id, "habit", "add");
+
                                               if (completedHabitIds.includes(id)) {
                                                 //undo
                                                 removeCompletion("habit", id);
@@ -506,7 +496,7 @@ export default function SchedulePlanner() {
                                               const fallbackSlot = `${currentDay}-${Math.min(currentHour + 1, 23)}:00`; // safe upper bound
                                               const slotToUse = targetSlot || fallbackSlot;
 
-                                              console.log("➕ Creating clone for:", habit.title, "→", newId, "in", slotToUse); // now safe
+                                              console.log("➕ Creating clone for:", habit.title, "→", newId, "in", slotToUse); // ✅ now safe
 
                                               // Add the clone
                                               setHabitClones((prev) => [...prev, { id: newId, habitId: habit.id }]);
@@ -524,7 +514,6 @@ export default function SchedulePlanner() {
                                             className="remove-btn"
                                             onClick={(e) => {
                                               e.stopPropagation();
-                                              updateScheduledCount(id, "habit", "remove");
                                               removeCompletion("habit", id);
                                               setScheduledTasks((prev) => {
                                                 const updated = { ...prev };
@@ -558,7 +547,6 @@ export default function SchedulePlanner() {
                                                 className="mark-done-btn"
                                                 onClick={(e) => {
                                                   e.stopPropagation();
-                                                  updateScheduledCount(id, "task", "add");
                                                   fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
                                                     method: "PATCH",
                                                     headers: { "Content-Type": "application/json" },
@@ -591,7 +579,6 @@ export default function SchedulePlanner() {
                                                 className="remove-btn"
                                                 onClick={(e) => {
                                                   e.stopPropagation();
-                                                  updateScheduledCount(String(task.id), "task", "remove");
                                                   removeCompletion("task", task.id);
                                                   setScheduledTasks((prev) => {
                                                     const updated = { ...prev };

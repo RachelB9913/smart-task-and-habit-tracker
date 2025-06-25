@@ -16,8 +16,8 @@ function isSameWeek(dateStr1, dateStr2) {
 }
 
 export default function StatisticsPanel() {
-  const [habitStats, setHabitStats] = useState({ week: 0, total: 0 });
-  const [taskStats, setTaskStats] = useState({ week: 0, total: 0 });
+  const [habitStats, setHabitStats] = useState({ week: 0 });
+  const [taskStats, setTaskStats] = useState({ week: 0 });
   const [trigger, setTrigger] = useState(0); // Refresh trigger
 
   // Refresh on custom event
