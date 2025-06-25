@@ -224,7 +224,7 @@ export default function StatisticsPanel() {
 
   return (
     <div className="stats-panel">
-      <div className="motivational-quote">{randomQuote.current}</div>
+      <div className="motivational-quote">💬 {randomQuote.current}</div>
       <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
       <div className="legend">
         <div className="legend-item">

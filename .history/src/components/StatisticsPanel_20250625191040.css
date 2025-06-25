@@ -144,10 +144,5 @@
   color: #e708cd;
   text-align: center;
   margin-top: 1rem;
-  font-size: 1.1rem;
-}
-
-.motivational-quote:hover {
-    color: #590fda;
-    cursor: pointer;
+  font-size: 0.9rem;
 }

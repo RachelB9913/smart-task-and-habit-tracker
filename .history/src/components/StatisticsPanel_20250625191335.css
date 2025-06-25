@@ -148,6 +148,6 @@
 }
 
 .motivational-quote:hover {
-    color: #590fda;
-    cursor: pointer;
+    color: #d5006d;
+    text-decoration: underline;
 }

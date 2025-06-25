@@ -159,6 +159,7 @@ export default function StatisticsPanel() {
   const [habitStats, setHabitStats] = useState({ week: 0, total: 0 });
   const [taskStats, setTaskStats] = useState({ week: 0, total: 0 });
   const [trigger, setTrigger] = useState(0);
+  const confettiFired = useRef(false);
   const randomQuote = useRef(quotes[Math.floor(Math.random() * quotes.length)]);
   const [wasAllTasksDone, setWasAllTasksDone] = useState(false);
   const [wasAllHabitsDone, setWasAllHabitsDone] = useState(false);
@@ -214,7 +215,7 @@ export default function StatisticsPanel() {
     }
     }, [allTasksDone, allHabitsDone]);
 
-
+    
   function getProgressColor(ratio, isDone) {
     if (isDone) return "gold";
     if (isNaN(ratio) || ratio === 0) return "#ccc";
@@ -224,7 +225,7 @@ export default function StatisticsPanel() {
 
   return (
     <div className="stats-panel">
-      <div className="motivational-quote">{randomQuote.current}</div>
+      <div className="motivational-quote">💬 {randomQuote.current}</div>
       <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
       <div className="legend">
         <div className="legend-item">

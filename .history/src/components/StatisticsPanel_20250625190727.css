@@ -138,16 +138,3 @@
   50% { transform: scale(1.1); opacity: 1; }
   100% { transform: scale(1); }
 }
-
-.motivational-quote {
-  font-style: italic;
-  color: #e708cd;
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 1.1rem;
-}
-
-.motivational-quote:hover {
-    color: #590fda;
-    cursor: pointer;
-}

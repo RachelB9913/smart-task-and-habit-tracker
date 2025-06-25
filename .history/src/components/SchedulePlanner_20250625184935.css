@@ -263,6 +263,6 @@
 
 .stat-circle.full-gold {
   background-color: gold;
-  border-radius: 50%;
-  padding: 0.3rem;
+  border-radius: 20%;
+  padding: 0.5rem;
 }

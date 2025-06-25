@@ -9,8 +9,8 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1rem;
-  color: #0e0101;
+  font-size: 1.2rem;
+  color: #333;
 }
 
 .stats-panel {
@@ -137,17 +137,4 @@
   0% { transform: scale(0.8); opacity: 0; }
   50% { transform: scale(1.1); opacity: 1; }
   100% { transform: scale(1); }
-}
-
-.motivational-quote {
-  font-style: italic;
-  color: #e708cd;
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 1.1rem;
-}
-
-.motivational-quote:hover {
-    color: #590fda;
-    cursor: pointer;
 }

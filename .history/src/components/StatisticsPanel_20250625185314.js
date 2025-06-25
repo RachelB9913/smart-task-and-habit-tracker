@@ -159,9 +159,8 @@ export default function StatisticsPanel() {
   const [habitStats, setHabitStats] = useState({ week: 0, total: 0 });
   const [taskStats, setTaskStats] = useState({ week: 0, total: 0 });
   const [trigger, setTrigger] = useState(0);
+  const confettiFired = useRef(false);
   const randomQuote = useRef(quotes[Math.floor(Math.random() * quotes.length)]);
-  const [wasAllTasksDone, setWasAllTasksDone] = useState(false);
-  const [wasAllHabitsDone, setWasAllHabitsDone] = useState(false);
 
   useEffect(() => {
     const handler = () => setTrigger((prev) => prev + 1);
@@ -191,29 +190,15 @@ export default function StatisticsPanel() {
   const allHabitsDone = habitStats.week === habitStats.total && habitStats.total > 0;
 
   useEffect(() => {
-    const fireConfetti = (x) => {
-        confetti({
+    if ((allTasksDone || allHabitsDone) && !confettiFired.current) {
+      confetti({
         particleCount: 150,
         spread: 70,
-        origin: { x, y: 0.2 },
-        });
-    };
-
-    if (allTasksDone && !wasAllTasksDone) {
-        fireConfetti(0.89); // near stats panel
-        setWasAllTasksDone(true);
-    } else if (!allTasksDone) {
-        setWasAllTasksDone(false);
+        origin: { x: 0.89, y: 0.2 } // top right of panel
+      });
+      confettiFired.current = true;
     }
-
-    if (allHabitsDone && !wasAllHabitsDone) {
-        fireConfetti(0.89); // same position
-        setWasAllHabitsDone(true);
-    } else if (!allHabitsDone) {
-        setWasAllHabitsDone(false);
-    }
-    }, [allTasksDone, allHabitsDone]);
-
+  }, [allTasksDone, allHabitsDone]);
 
   function getProgressColor(ratio, isDone) {
     if (isDone) return "gold";
@@ -224,7 +209,7 @@ export default function StatisticsPanel() {
 
   return (
     <div className="stats-panel">
-      <div className="motivational-quote">{randomQuote.current}</div>
+      <div className="motivational-quote">💬 {randomQuote.current}</div>
       <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
       <div className="legend">
         <div className="legend-item">
