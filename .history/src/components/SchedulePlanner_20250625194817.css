@@ -6,7 +6,6 @@
   padding: 1rem;
 }
 
-/* Shared panel styles */
 .quote-panel {
   background-color: #fdf7ff;
   color: mediumvioletred;
@@ -24,6 +23,7 @@
   max-width: 220px;
 }
 
+/* Limit max width so it's aligned with the main stats panel */
 .stats-wrapper .stats-panel {
   width: 100%;
   max-width: 220px;

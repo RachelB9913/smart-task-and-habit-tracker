@@ -231,9 +231,7 @@ export default function StatisticsPanel() {
 
   return (
     <div className="stats-wrapper">
-    <div className="quote-panel">
-      {randomQuote.current}
-    </div>
+      <div className="motivational-quote">{randomQuote.current}</div>
 
     <div className="stats-panel">
         <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>

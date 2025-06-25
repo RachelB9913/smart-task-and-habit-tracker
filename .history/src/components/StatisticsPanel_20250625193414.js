@@ -231,11 +231,12 @@ export default function StatisticsPanel() {
 
   return (
     <div className="stats-wrapper">
-    <div className="quote-panel">
-      {randomQuote.current}
+
+    <div className="stats-panel quote-box">
+        <div className="motivational-quote">{randomQuote.current}</div>
     </div>
 
-    <div className="stats-panel">
+      <div className="stats-panel">
         <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
         <div className="legend">
             <div className="legend-item">
@@ -296,7 +297,7 @@ export default function StatisticsPanel() {
                 <div>{habitStats.week} / {habitStats.total}</div>
             </div>
         </div>
-      </div>
+        </div>
     </div>
   );
 }

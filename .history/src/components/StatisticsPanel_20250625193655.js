@@ -232,7 +232,7 @@ export default function StatisticsPanel() {
   return (
     <div className="stats-wrapper">
     <div className="quote-panel">
-      {randomQuote.current}
+      <div className="motivational-quote">{randomQuote.current}</div>
     </div>
 
     <div className="stats-panel">

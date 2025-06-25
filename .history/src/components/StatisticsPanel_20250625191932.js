@@ -230,71 +230,66 @@ export default function StatisticsPanel() {
   }
 
   return (
-    <div className="stats-wrapper">
-    <div className="quote-panel">
-      {randomQuote.current}
-    </div>
-
     <div className="stats-panel">
-        <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
-        <div className="legend">
-            <div className="legend-item">
-            <span className="dot green"></span> ≥ 50% completed
-            </div>
-            <div className="legend-item">
-            <span className="dot yellow"></span> &lt; 50% completed
-            </div>
-            <div className="legend-item">
-            <span className="dot gray"></span> Not started
-            </div>
+      <div className="motivational-quote">{randomQuote.current}</div>
+      <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
+      <div className="legend">
+        <div className="legend-item">
+          <span className="dot green"></span> ≥ 50% completed
         </div>
-
-        {(allTasksDone || allHabitsDone) && (
-            <div className="celebration-message">
-            🎉 {allTasksDone && allHabitsDone
-                ? "You completed ALL your tasks and habits this week!"
-                : allTasksDone
-                ? "All tasks completed – amazing work! ✅"
-                : "All habits completed – you're crushing it! 💪"}
-            </div>
-        )}
-
-        <div className={`stat-circle ${taskStats.week === taskStats.total && taskStats.total > 0 ? "full-gold" : ""}`}>
-            <svg>
-                <circle className="stat-bg" cx="70" cy="70" r="60" />
-                <circle
-                className="stat-fill"
-                cx="70"
-                cy="70"
-                r="60"
-                stroke={getProgressColor(taskStats.week / taskStats.total || 0)}
-                strokeDasharray={2 * Math.PI * 60}
-                strokeDashoffset={(1 - (taskStats.week / taskStats.total || 0)) * 2 * Math.PI * 60}
-                />
-            </svg>
-            <div className="stat-label">
-                <div>Tasks</div>
-                <div>{taskStats.week} / {taskStats.total}</div>
-            </div>
+        <div className="legend-item">
+          <span className="dot yellow"></span> &lt; 50% completed
         </div>
+        <div className="legend-item">
+          <span className="dot gray"></span> Not started
+        </div>
+      </div>
 
-        <div className={`stat-circle ${habitStats.week === habitStats.total && habitStats.total > 0 ? "full-gold" : ""}`}>
-            <svg>
-                <circle className="stat-bg" cx="70" cy="70" r="60" />
-                <circle
-                className="stat-fill"
-                cx="70"
-                cy="70"
-                r="60"
-                stroke={getProgressColor(habitStats.week / habitStats.total || 0)}
-                strokeDasharray={2 * Math.PI * 60}
-                strokeDashoffset={(1 - (habitStats.week / habitStats.total || 0)) * 2 * Math.PI * 60}
-                />
-            </svg>
-            <div className="stat-label">
-                <div>Habits</div>
-                <div>{habitStats.week} / {habitStats.total}</div>
-            </div>
+      {(allTasksDone || allHabitsDone) && (
+        <div className="celebration-message">
+          🎉 {allTasksDone && allHabitsDone
+            ? "You completed ALL your tasks and habits this week!"
+            : allTasksDone
+            ? "All tasks completed – amazing work! ✅"
+            : "All habits completed – you're crushing it! 💪"}
+        </div>
+      )}
+
+      <div className={`stat-circle ${taskStats.week === taskStats.total && taskStats.total > 0 ? "full-gold" : ""}`}>
+        <svg>
+            <circle className="stat-bg" cx="70" cy="70" r="60" />
+            <circle
+            className="stat-fill"
+            cx="70"
+            cy="70"
+            r="60"
+            stroke={getProgressColor(taskStats.week / taskStats.total || 0)}
+            strokeDasharray={2 * Math.PI * 60}
+            strokeDashoffset={(1 - (taskStats.week / taskStats.total || 0)) * 2 * Math.PI * 60}
+            />
+        </svg>
+        <div className="stat-label">
+            <div>Tasks</div>
+            <div>{taskStats.week} / {taskStats.total}</div>
+        </div>
+      </div>
+
+      <div className={`stat-circle ${habitStats.week === habitStats.total && habitStats.total > 0 ? "full-gold" : ""}`}>
+        <svg>
+            <circle className="stat-bg" cx="70" cy="70" r="60" />
+            <circle
+            className="stat-fill"
+            cx="70"
+            cy="70"
+            r="60"
+            stroke={getProgressColor(habitStats.week / habitStats.total || 0)}
+            strokeDasharray={2 * Math.PI * 60}
+            strokeDashoffset={(1 - (habitStats.week / habitStats.total || 0)) * 2 * Math.PI * 60}
+            />
+        </svg>
+        <div className="stat-label">
+            <div>Habits</div>
+            <div>{habitStats.week} / {habitStats.total}</div>
         </div>
       </div>
     </div>
