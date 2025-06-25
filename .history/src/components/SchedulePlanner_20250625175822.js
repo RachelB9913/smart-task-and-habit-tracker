@@ -173,7 +173,6 @@ export default function SchedulePlanner() {
   const [habits, setHabits] = useState(location.state?.habits || []);
   const [scheduledTasks, setScheduledTasks] = useState({});
   const [habitClones, setHabitClones] = useState([]); // [{ id: 'habit-1-copy-1', habitId: 1 }]
-  const [showSaveModal, setShowSaveModal] = useState(false);
 
   const [completedHabitIds, setCompletedHabitIds] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
@@ -330,7 +329,10 @@ export default function SchedulePlanner() {
       <header className="dashboard-header">
         <div className="header-left"><h2>🗓️ Weekly Planner</h2></div>
         <div className="header-right">
-          {/* <button
+          {/* <button onClick={() => navigate("/dashboard")} className="logout-button">
+            Back to Dashboard
+          </button> */}
+          <button
             onClick={() => {
               const confirmSave = window.confirm("Do you want to save your schedule before going back?");
               if (confirmSave) {
@@ -338,12 +340,6 @@ export default function SchedulePlanner() {
               }
               navigate("/dashboard");
             }}
-            className="logout-button"
-          >
-            Back to Dashboard
-          </button> */}
-          <button
-            onClick={() => setShowSaveModal(true)}
             className="logout-button"
           >
             Back to Dashboard
@@ -658,34 +654,6 @@ export default function SchedulePlanner() {
             </div>
           </main>
           <StatisticsPanel />
-          {showSaveModal && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <p>Do you want to save your schedule before going back?</p>
-                <div className="modal-buttons">
-                  <button
-                    className="confirm-btn"
-                    onClick={() => {
-                      saveSchedule();
-                      setShowSaveModal(false);
-                      navigate("/dashboard");
-                    }}
-                  >
-                    Yes, Save
-                  </button>
-                  <button
-                    className="cancel-btn"
-                    onClick={() => {
-                      setShowSaveModal(false);
-                      navigate("/dashboard");
-                    }}
-                  >
-                    No, Just Go
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </DragDropContext>
     </div>

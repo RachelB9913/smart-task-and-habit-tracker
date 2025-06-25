@@ -71,7 +71,7 @@ function getProgressColor(ratio) {
         <div className="legend-item">
             <span className="dot gray"></span> Not started
         </div>
-    </div>
+        </div>
 
     <div className="stat-circle">
       <svg>

@@ -667,6 +667,7 @@ export default function SchedulePlanner() {
                     className="confirm-btn"
                     onClick={() => {
                       saveSchedule();
+                      alert("✅ Schedule saved!");
                       setShowSaveModal(false);
                       navigate("/dashboard");
                     }}

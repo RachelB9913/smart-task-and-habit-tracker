@@ -77,14 +77,19 @@ function getProgressColor(ratio) {
       <svg>
         <circle className="stat-bg" cx="70" cy="70" r="60" />
         <circle
-            className="stat-fill"
-            cx="70"
-            cy="70"
-            r="60"
-            stroke={getProgressColor(taskStats.week / taskStats.total || 0)}
-            strokeDasharray={2 * Math.PI * 60}
-            strokeDashoffset={(1 - (taskStats.week / taskStats.total || 0)) * 2 * Math.PI * 60}
-            />
+  className="progress-ring"
+  stroke={getProgressColor(ratio)}
+  strokeWidth="8"
+  fill="transparent"
+  r="40"
+  cx="50"
+  cy="50"
+  style={{
+    strokeDasharray: 251.2, // 2πr for r=40
+    strokeDashoffset: 251.2 * (1 - ratio), // dynamically update this
+    transition: "stroke-dashoffset 1s ease-out" // ✨ animate
+  }}
+/>
       </svg>
       <div className="stat-label">
         <div>Tasks</div>

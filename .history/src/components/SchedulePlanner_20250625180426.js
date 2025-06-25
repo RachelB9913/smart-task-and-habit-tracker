@@ -658,36 +658,38 @@ export default function SchedulePlanner() {
             </div>
           </main>
           <StatisticsPanel />
-          {showSaveModal && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <p>Do you want to save your schedule before going back?</p>
-                <div className="modal-buttons">
-                  <button
-                    className="confirm-btn"
-                    onClick={() => {
-                      saveSchedule();
-                      setShowSaveModal(false);
-                      navigate("/dashboard");
-                    }}
-                  >
-                    Yes, Save
-                  </button>
-                  <button
-                    className="cancel-btn"
-                    onClick={() => {
-                      setShowSaveModal(false);
-                      navigate("/dashboard");
-                    }}
-                  >
-                    No, Just Go
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </DragDropContext>
     </div>
   );
 }
+
+{showSaveModal && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <p>Do you want to save your schedule before going back?</p>
+      <div className="modal-buttons">
+        <button
+          className="confirm-btn"
+          onClick={() => {
+            saveSchedule();
+            alert("✅ Schedule saved!");
+            setShowSaveModal(false);
+            navigate("/dashboard");
+          }}
+        >
+          Yes, Save
+        </button>
+        <button
+          className="cancel-btn"
+          onClick={() => {
+            setShowSaveModal(false);
+            navigate("/dashboard");
+          }}
+        >
+          No, Just Go
+        </button>
+      </div>
+    </div>
+  </div>
+)}

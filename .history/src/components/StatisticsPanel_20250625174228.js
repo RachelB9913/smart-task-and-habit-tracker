@@ -62,15 +62,10 @@ function getProgressColor(ratio) {
   <div className="stats-panel">
     <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>📊 Weekly Progress - Some Stats</h3>
     <div className="legend">
-        <div className="legend-item">
-            <span className="dot green"></span> ≥ 50% completed
-        </div>
-        <div className="legend-item">
-            <span className="dot yellow"></span> &lt; 50% completed
-        </div>
-        <div className="legend-item">
-            <span className="dot gray"></span> Not started
-        </div>
+        <span className="dot green"></span> ≥ 50% completed
+        <br />
+        <span className="dot yellow"></span> {"<"} 50% completed
+        <span className="dot gray"></span> Not started
     </div>
 
     <div className="stat-circle">

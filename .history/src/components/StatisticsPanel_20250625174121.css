@@ -100,19 +100,7 @@
 .legend {
   font-size: 0.8rem;
   margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  align-items: flex-start; /* optional: align left */
 }
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-
 .dot {
   display: inline-block;
   width: 10px;

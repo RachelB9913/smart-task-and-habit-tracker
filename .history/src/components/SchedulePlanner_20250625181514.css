@@ -239,13 +239,11 @@
 .confirm-btn {
   background-color: #4CAF50;
   color: white;
-  font-weight: lighter;
 }
 
 .cancel-btn {
   background-color: #f44336;
   color: white;
-  font-weight: lighter;
 }
 
 .confirm-btn:hover {
