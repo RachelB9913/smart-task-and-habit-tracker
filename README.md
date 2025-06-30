@@ -1,6 +1,6 @@
-# Smart Task & Habit Tracker 🧠✅  
+# Smart Task & Habit Tracker 🧠✅   ![In Progress](https://img.shields.io/badge/Status-%F0%9F%A7%AA%20In%20Progress-blue)
 🧪 In Progress — This project is actively being built!
-![In Progress](https://img.shields.io/badge/Status-%F0%9F%A7%AA%20In%20Progress-blue)
+
 
 A full-stack productivity app that lets users manage daily tasks and long-term habits, plan them visually on a weekly schedule, and track their completion over time.
 
