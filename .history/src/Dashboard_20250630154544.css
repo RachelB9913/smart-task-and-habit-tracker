@@ -25,9 +25,8 @@
 
 .header-left {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   flex: 1; /* allows the left side to take up space */
 }
 
@@ -268,26 +267,4 @@ h1 {
   padding: 0.2rem 0.7rem;
   font-size: 0.9rem;
   margin-left: 0.5rem;
-}
-
-.planner-subrow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.2rem;
-  padding-left: 0.6rem; /* to be under the welcome */
-}
-
-.planner-text {
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.toggle-button.small {
-  font-size: 0.75rem;
-  padding: 0.35rem 0.5rem;
-  height: auto;
-  line-height: 1;
-  margin: 0.5rem 0;
-  background-color: #848484;
 }

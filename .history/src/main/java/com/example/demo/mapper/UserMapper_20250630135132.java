@@ -15,8 +15,8 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setTaskIds(user.getTasks().stream().map(Task::getId).collect(Collectors.toList()));
         dto.setHabitIds(user.getHabits().stream().map(Habit::getId).collect(Collectors.toList()));
-        dto.setStartHour(user.getStartHour() == 0 ? 6 : user.getStartHour());
-        dto.setEndHour(user.getEndHour() == 0 ? 23 : user.getEndHour());
+        dto.setStartHour(user.getStartHour());
+        dto.setEndHour(user.getEndHour());
         return dto;
     }
 

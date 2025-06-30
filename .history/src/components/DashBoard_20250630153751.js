@@ -317,72 +317,93 @@ useEffect(() => {
   const handleUpdateHours = async (e) => {
     e.preventDefault();
     try {
+      const userId = localStorage.getItem("userId");
       await fetch("http://localhost:8080/api/users/update-hours", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, startHour, endHour })
       });
 
+      // Update localStorage so SchedulePlanner uses the new values
       localStorage.setItem("startHour", startHour);
       localStorage.setItem("endHour", endHour);
 
-      setShowHourForm(false); // ✅ Auto-close the form
       alert("Planner hours updated!");
     } catch (err) {
       console.error("Failed to update hours", err);
-      alert("Update failed");
+      alert("Error updating hours");
     }
   };
 
   return (
     <div className={`dashboard-container ${background}`}>
       <header className="dashboard-header">
-      <div className="header-left">
-        <h2>Welcome, {username} 👋</h2>
-
-        <div className="planner-subrow">
-          <span className="planner-text">
-            Your planner runs from {startHour}:00 to {endHour}:00
-          </span>
-          <button
-            onClick={() => setShowHourForm(!showHourForm)}
-            className="toggle-button small"
-          >
-            {showHourForm ? "Cancel" : "Update"}
-          </button>
+        <div className="header-left">
+          <h2>
+            Welcome, {username} 👋
+            <br />
+            <span style={{ fontSize: "1rem", fontWeight: "normal" }}>
+              Your planner runs from {startHour}:00 to {endHour}:00
+            </span>
+            <button
+              onClick={() => setShowHourForm(!showHourForm)}
+              className="toggle-button"
+              style={{
+                marginLeft: "1rem",
+                padding: "0.3rem 0.7rem",
+                fontSize: "0.9rem",
+                height: "2rem",
+                lineHeight: "1rem"
+              }}
+            >
+              {showHourForm ? "Cancel" : "Update Hours"}
+            </button>
+          </h2>
+          {showHourForm && (
+            <form
+              onSubmit={handleUpdateHours}
+              style={{
+                display: "inline-block",
+                marginLeft: "1rem",
+                background: "#fff",
+                borderRadius: "0.5rem",
+                padding: "0.5rem 1rem",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                fontSize: "0.95rem",
+                position: "absolute",
+                zIndex: 10
+              }}
+            >
+              <label style={{ marginRight: "0.5rem" }}>
+                Start:
+                <input
+                  type="number"
+                  value={startHour}
+                  min={0}
+                  max={23}
+                  style={{ width: "2.5rem", marginLeft: "0.2rem" }}
+                  onChange={(e) => setStartHour(Number(e.target.value))}
+                />
+              </label>
+              <label style={{ marginRight: "0.5rem" }}>
+                End:
+                <input
+                  type="number"
+                  value={endHour}
+                  min={0}
+                  max={23}
+                  style={{ width: "2.5rem", marginLeft: "0.2rem" }}
+                  onChange={(e) => setEndHour(Number(e.target.value))}
+                />
+              </label>
+              <button type="submit" style={{ padding: "0.2rem 0.7rem", fontSize: "0.9rem" }}>Save</button>
+            </form>
+          )}
         </div>
-
-        {showHourForm && (
-          <form onSubmit={handleUpdateHours} className="hour-update-form">
-            <label>
-              Start:
-              <input
-                type="number"
-                value={startHour}
-                min={0}
-                max={23}
-                onChange={(e) => setStartHour(Number(e.target.value))}
-              />
-            </label>
-            <label>
-              End:
-              <input
-                type="number"
-                value={endHour}
-                min={0}
-                max={23}
-                onChange={(e) => setEndHour(Number(e.target.value))}
-              />
-            </label>
-            <button type="submit">Save</button>
-          </form>
-        )}
-      </div>
-
-      <div className="header-right">
-        <button onClick={handleLogout} className="logout-button">Logout</button>
-      </div>
-    </header>
+        <div className="header-right">
+          <button onClick={handleLogout} className="logout-button">Logout</button>
+        </div>
+      </header>
 
       <main>
         <h1>Let's achieve some goals! 🎯</h1>

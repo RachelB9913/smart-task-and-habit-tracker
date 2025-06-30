@@ -25,32 +25,32 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // @PostMapping("/register")
-    // public ResponseEntity<String> register(@RequestBody User user) {
-    //     if (userRepository.findByUsername(user.getUsername()) != null) {
-    //         return ResponseEntity.badRequest().body("Username already taken");
-    //     }
-    //     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    //     userRepository.save(user);
-    //     return ResponseEntity.ok("User registered successfully");
-    // }
-
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        if (userRepository.findByUsername(request.getUsername()) != null) {
+    public ResponseEntity<String> register(@RequestBody User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
-
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setStartHour(request.getStartHour());
-        user.setEndHour(request.getEndHour());
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
     }
+
+    // @PostMapping("/register")
+    // public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    //     if (userRepository.findByUsername(request.getUsername()) != null) {
+    //         return ResponseEntity.badRequest().body("Username already taken");
+    //     }
+
+    //     User user = new User();
+    //     user.setUsername(request.getUsername());
+    //     user.setEmail(request.getEmail());
+    //     user.setPassword(passwordEncoder.encode(request.getPassword()));
+    //     user.setStartHour(request.getStartHour());
+    //     user.setEndHour(request.getEndHour());
+
+    //     userRepository.save(user);
+    //     return ResponseEntity.ok("User registered successfully");
+    // }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody User loginData) {

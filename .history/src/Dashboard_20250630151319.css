@@ -25,9 +25,8 @@
 
 .header-left {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   flex: 1; /* allows the left side to take up space */
 }
 
@@ -227,67 +226,4 @@ h1 {
   font-family: 'Manrope', 'Noto Sans', sans-serif;
   font-size: 0.95rem;
   font-weight: lighter;
-}
-
-.planner-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 1rem;
-  font-weight: normal;
-  margin-top: 0.3rem;
-}
-
-.planner-info span {
-  flex-shrink: 0;
-}
-
-.hour-update-form {
-  position: relative;
-  margin-left: 0;
-  margin-top: 0.5rem;
-  display: inline-block;
-  background: #fff;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  font-size: 0.95rem;
-  z-index: 10;
-}
-
-.hour-update-form label {
-  margin-right: 0.5rem;
-}
-
-.hour-update-form input {
-  width: 2.5rem;
-  margin-left: 0.2rem;
-}
-
-.hour-update-form button {
-  padding: 0.2rem 0.7rem;
-  font-size: 0.9rem;
-  margin-left: 0.5rem;
-}
-
-.planner-subrow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.2rem;
-  padding-left: 0.6rem; /* to be under the welcome */
-}
-
-.planner-text {
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.toggle-button.small {
-  font-size: 0.75rem;
-  padding: 0.35rem 0.5rem;
-  height: auto;
-  line-height: 1;
-  margin: 0.5rem 0;
-  background-color: #848484;
 }

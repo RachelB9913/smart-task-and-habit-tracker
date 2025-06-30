@@ -15,12 +15,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Automatically convert number fields to numbers
-    const parsedValue = (name === "startHour" || name === "endHour") ? Number(value) : value;
-
-    setFormData({ ...formData, [name]: parsedValue });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
@@ -55,7 +50,6 @@ export default function Register() {
         <div className="form-container">
           <form onSubmit={handleSubmit}>
             <h2>Register</h2>
-
             <input
               type="text"
               name="username"
@@ -64,7 +58,6 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-
             <input
               type="email"
               name="email"
@@ -73,7 +66,6 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-
             <input
               type="password"
               name="password"
@@ -82,29 +74,12 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-
-            <label>
-              Start Hour:
-              <input
-                type="number"
-                name="startHour"
-                min="0"
-                max="23"
-                value={formData.startHour}
-                onChange={handleChange}
-              />
+            <label>Start Hour:
+              <input type="number" min="0" max="23" value={startHour} onChange={(e) => setStartHour(Number(e.target.value))} />
             </label>
 
-            <label>
-              End Hour:
-              <input
-                type="number"
-                name="endHour"
-                min="0"
-                max="23"
-                value={formData.endHour}
-                onChange={handleChange}
-              />
+            <label>End Hour:
+              <input type="number" min="0" max="23" value={endHour} onChange={(e) => setEndHour(Number(e.target.value))} />
             </label>
 
             <div className="button-group">
@@ -123,3 +98,4 @@ export default function Register() {
     </div>
   );
 }
+

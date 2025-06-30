@@ -274,8 +274,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.2rem;
-  padding-left: 0.6rem; /* to be under the welcome */
+  margin-top: 0.4rem;
 }
 
 .planner-text {
@@ -284,10 +283,9 @@ h1 {
 }
 
 .toggle-button.small {
-  font-size: 0.75rem;
-  padding: 0.35rem 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
   height: auto;
   line-height: 1;
-  margin: 0.5rem 0;
-  background-color: #848484;
+  background-color: #69a2a5;
 }

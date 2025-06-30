@@ -15,8 +15,8 @@ public class User {
     private String email;
     private String password;
     private LocalDateTime createdAt = LocalDateTime.now();
-    private int startHour = 6; // Default start hour
-    private int endHour = 23; // Default end hour
+    private int startHour;
+    private int endHour;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Task> tasks;
@@ -84,16 +84,8 @@ public class User {
     public int getStartHour() {
         return startHour;
     }
-
+    
     public void setStartHour(int startHour) {
         this.startHour = startHour;
-    }
-
-    public int getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(int endHour) {
-        this.endHour = endHour;
     }
 }

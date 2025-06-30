@@ -317,20 +317,21 @@ useEffect(() => {
   const handleUpdateHours = async (e) => {
     e.preventDefault();
     try {
+      const userId = localStorage.getItem("userId");
       await fetch("http://localhost:8080/api/users/update-hours", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, startHour, endHour })
       });
 
+      // Update localStorage so SchedulePlanner uses the new values
       localStorage.setItem("startHour", startHour);
       localStorage.setItem("endHour", endHour);
 
-      setShowHourForm(false); // ✅ Auto-close the form
       alert("Planner hours updated!");
     } catch (err) {
       console.error("Failed to update hours", err);
-      alert("Update failed");
+      alert("Error updating hours");
     }
   };
 

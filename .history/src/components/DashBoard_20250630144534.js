@@ -25,8 +25,6 @@ export default function Dashboard() {
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [newHabit, setNewHabit] = useState({ title: "", description: "", frequency: "" , preferredTime: ""});
 
-  const [showHourForm, setShowHourForm] = useState(false);
-
   const navigate = useNavigate();
 
   const reorder = (list, startIndex, endIndex) => {
@@ -114,28 +112,23 @@ export default function Dashboard() {
     }
   }, []);
 
-useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/users/${userId}`);
-      const data = await res.json();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`http://localhost:8080/api/users/${userId}`);
+        const data = await res.json();
+        setStartHour(data.startHour ?? 6);
+        setEndHour(data.endHour ?? 23);
+        setUsername(data.username);
+      } catch (err) {
+        console.error("Failed to fetch user", err);
+      }
+    };
 
-      const safeStart = data.startHour ?? 6;
-      const safeEnd = data.endHour ?? 23;
-
-      localStorage.setItem("startHour", safeStart);
-      localStorage.setItem("endHour", safeEnd);
-
-      setStartHour(safeStart);
-      setEndHour(safeEnd);
-      setUsername(data.username);
-    } catch (err) {
-      console.error("Failed to fetch user", err);
+    if (userId) {
+      fetchUser();
     }
-  };
-
-  if (userId) fetchUser();
-}, [userId]);
+  }, [userId]);
 
   useEffect(() => {
     if (!userId) return;
@@ -314,75 +307,16 @@ useEffect(() => {
     }
   };
 
-  const handleUpdateHours = async (e) => {
-    e.preventDefault();
-    try {
-      await fetch("http://localhost:8080/api/users/update-hours", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, startHour, endHour })
-      });
-
-      localStorage.setItem("startHour", startHour);
-      localStorage.setItem("endHour", endHour);
-
-      setShowHourForm(false); // ✅ Auto-close the form
-      alert("Planner hours updated!");
-    } catch (err) {
-      console.error("Failed to update hours", err);
-      alert("Update failed");
-    }
-  };
-
   return (
     <div className={`dashboard-container ${background}`}>
       <header className="dashboard-header">
-      <div className="header-left">
-        <h2>Welcome, {username} 👋</h2>
-
-        <div className="planner-subrow">
-          <span className="planner-text">
-            Your planner runs from {startHour}:00 to {endHour}:00
-          </span>
-          <button
-            onClick={() => setShowHourForm(!showHourForm)}
-            className="toggle-button small"
-          >
-            {showHourForm ? "Cancel" : "Update"}
-          </button>
+        <div className="header-left">
+          <h2>Welcome, {username} 👋</h2>
         </div>
-
-        {showHourForm && (
-          <form onSubmit={handleUpdateHours} className="hour-update-form">
-            <label>
-              Start:
-              <input
-                type="number"
-                value={startHour}
-                min={0}
-                max={23}
-                onChange={(e) => setStartHour(Number(e.target.value))}
-              />
-            </label>
-            <label>
-              End:
-              <input
-                type="number"
-                value={endHour}
-                min={0}
-                max={23}
-                onChange={(e) => setEndHour(Number(e.target.value))}
-              />
-            </label>
-            <button type="submit">Save</button>
-          </form>
-        )}
-      </div>
-
-      <div className="header-right">
-        <button onClick={handleLogout} className="logout-button">Logout</button>
-      </div>
-    </header>
+        <div className="header-right">
+          <button onClick={handleLogout} className="logout-button">Logout</button>
+        </div>
+      </header>
 
       <main>
         <h1>Let's achieve some goals! 🎯</h1>

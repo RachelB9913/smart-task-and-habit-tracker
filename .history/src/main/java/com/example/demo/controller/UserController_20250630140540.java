@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UpdateHoursRequest;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Habit;
 import com.example.demo.entity.Task;
@@ -75,18 +74,6 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PutMapping("/update-hours")
-    public ResponseEntity<String> updateUserHours(@RequestBody UpdateHoursRequest request) {
-        User user = userRepository.findById(request.getUserId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setStartHour(request.getStartHour());
-        user.setEndHour(request.getEndHour());
-        userRepository.save(user);
-
-        return ResponseEntity.ok("Hours updated successfully");
     }
 
 }
