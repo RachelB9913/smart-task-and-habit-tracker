@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+# Smart Task & Habit Tracker 🧠✅  
+🧪 In Progress — This project is actively being built!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack productivity app that lets users manage daily tasks and long-term habits, plan them visually on a weekly schedule, and track their completion over time.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features So Far
 
-### `npm start`
+- 🔐 **User authentication** (register, login)
+- ⏰ **Personalized planner hours** – user defines their day start/end during registration
+- 📅 **Drag-and-drop weekly planner** for placing tasks and recurring habits
+- 📆 **Auto-scheduling** habits based on frequency & preferred time
+- ✅ **Mark tasks as completed**
+- 📦 **Data persistence** via Spring Boot backend (Java) and local storage
+- 🎨 **Clean UI** with real-time updates using React
+- ⚙️ **Option to update planner hours** directly from the dashboard
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🚀 How to Run Locally
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 📦 Backend (Spring Boot + PostgreSQL)
 
-### `npm run build`
+1. Clone this repository  
+   ```bash
+   git clone https://github.com/yourusername/smart-task-habit-tracker.git
+   cd smart-task-habit-tracker
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Set up PostgreSQL and create a database (e.g. `taskmaster`)
+3. Update `application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/taskmaster
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   spring.jpa.hibernate.ddl-auto=update
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Run the Spring Boot app:
+   ```
+   ./mvnw spring-boot:run
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 💻 Frontend (React)
 
-### `npm run eject`
+1. Open a new terminal in the `frontend/` directory
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Run the development server:
+   ```
+   npm start
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The app will be running at `http://localhost:3000/`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🛠️ Tech Stack
 
-## Learn More
+- **Frontend**: React, CSS
+- **Backend**: Java, Spring Boot, REST API
+- **Database**: PostgreSQL
+- **Drag and Drop**: @hello-pangea/dnd
+- **Deployment**: In progress
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📌 Next Features (coming soon)
 
-### Code Splitting
+- 📊 Habit & task completion **statistics** (weekly, monthly)
+- 🔄 **Google Calendar integration**
+- 🪄 **Responsive design improvements**
+- ⚙️ **Settings page** for more personal design
+- 🧠 Smart recommendations engine (future idea!)
+- 🚀 **Public live version of the app for users**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🙋‍♀️ Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Rachel Belokopytov**  
+[GitHub](https://github.com/RachelB9913) | [LinkedIn](https://www.linkedin.com/in/rachel-belokopytov/)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
