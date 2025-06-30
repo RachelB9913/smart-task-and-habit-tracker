@@ -1,5 +1,6 @@
 # Smart Task & Habit Tracker 🧠✅  
 🧪 In Progress — This project is actively being built!
+![In Progress](https://img.shields.io/badge/Status-%F0%9F%A7%AA%20In%20Progress-blue)
 
 A full-stack productivity app that lets users manage daily tasks and long-term habits, plan them visually on a weekly schedule, and track their completion over time.
 
@@ -10,12 +11,11 @@ A full-stack productivity app that lets users manage daily tasks and long-term h
 - 🔐 **User authentication** (register, login)
 - ⏰ **Personalized planner hours** – user defines their day start/end during registration
 - 📅 **Drag-and-drop weekly planner** for placing tasks and recurring habits
-- 📆 **Auto-scheduling** habits based on frequency & preferred time
+- 🤖 **Auto-scheduling** habits based on frequency & preferred time
 - ✅ **Mark tasks as completed**
+- ⚙️ **Option to update planner hours** directly from the dashboard
 - 📦 **Data persistence** via Spring Boot backend (Java) and local storage
 - 🎨 **Clean UI** with real-time updates using React
-- ⚙️ **Option to update planner hours** directly from the dashboard
-
 
 ---
 
