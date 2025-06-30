@@ -16,6 +16,7 @@ const timeBlocks = {
   afternoon: [12, 13, 14, 15, 16, 17],
   evening: [18, 19, 20, 21, 22, 23],
 };
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function getPreferredHours(preferredTime) {
   if (!preferredTime) return [];
@@ -193,9 +194,8 @@ export default function SchedulePlanner() {
   };
 
   const [hourStart, setHourStart] = useState(6);
-  const [hourEnd, setHourEnd] = useState(22);
+  const [hourEnd, setHourEnd] = useState(23);
   const hours = Array.from({ length: hourEnd - hourStart + 1 }, (_, i) => i + hourStart);
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   useEffect(() => {
     document.documentElement.style.setProperty('--row-count', hourEnd - hourStart + 1);

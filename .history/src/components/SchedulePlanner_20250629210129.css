@@ -34,9 +34,7 @@
 
 .planner-container {
   display: flex;
-  align-items: stretch;
-  height: auto;
-  min-height: calc(var(--row-count) * var(--cell-height));
+  height: calc(100vh - 120px); 
   font-family: 'Manrope', sans-serif;
 }
 
@@ -62,7 +60,7 @@
 }
 
 :root {
-  --cell-height: 62px;
+  --cell-height: 55.5px;
 }
 
 .calendar-grid {
@@ -93,7 +91,6 @@
 }
 
 .cell {
-  height: auto;
   padding: 0.5rem;
   border-right: 1px solid #ccc;
   overflow: hidden;
@@ -111,7 +108,7 @@
 .time-slot {
   background-color: #c5b0b0;
   border-radius: 6px;
-  height: 56px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,13 +127,11 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 56px; 
+  height: 50px; 
   font-weight: 600;
 }
 
 .scheduled-task {
-  display: flex;
-  flex-direction: column;
   background-color: #a8dadc;
   border: 1px solid #3dbd19;
   padding: 2px 6px;
@@ -223,17 +218,10 @@
 }
 
 .habit-icons {
-  margin: 0;
-  padding: 0;
-  border: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  justify-content: center;
+  gap: 4px;
 }
-
 .duplicate-btn {
-  gap: 0;
   background: none;
   border: none;
   font-size: 1rem;
@@ -283,7 +271,8 @@
   gap: 1rem;
 }
 
-.confirm-btn, .cancel-btn {
+.confirm-btn,
+.cancel-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   border: none;

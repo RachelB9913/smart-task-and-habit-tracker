@@ -34,9 +34,7 @@
 
 .planner-container {
   display: flex;
-  align-items: stretch;
-  height: auto;
-  min-height: calc(var(--row-count) * var(--cell-height));
+  height: calc(100vh - 120px); 
   font-family: 'Manrope', sans-serif;
 }
 
@@ -62,23 +60,31 @@
 }
 
 :root {
-  --cell-height: 62px;
+  --cell-height: 50px;
 }
 
 .calendar-grid {
-  display: grid;
-  grid-template-rows: repeat(var(--row-count), 1fr);
   height: calc(var(--row-count) * var(--cell-height));
+}
+
+.calendar-grid {
   flex: 1;
+  display: grid;
+  flex-direction: column;
   overflow: auto;
   margin: 1rem;
   border-radius: 1rem;
-  background: rgb(240, 240, 240);
+  background: white;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  grid-template-rows: repeat(var(--row-count), 1fr);
 }
 
 
 .grid-header {
+  /* display: flex;
+  background: #cfe2ff;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc; */
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr); /* hour + 7 days */
   background: #cfe2ff;
@@ -87,13 +93,14 @@
 }
 
 .grid-body .row {
+  /* display: flex;
+  border-bottom: 1px solid #eee; */
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr); /* same as above */
   border-bottom: 1px solid #eee;
 }
 
 .cell {
-  height: auto;
   padding: 0.5rem;
   border-right: 1px solid #ccc;
   overflow: hidden;
@@ -111,7 +118,7 @@
 .time-slot {
   background-color: #c5b0b0;
   border-radius: 6px;
-  height: 56px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,13 +137,11 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 56px; 
+  height: 50px; 
   font-weight: 600;
 }
 
 .scheduled-task {
-  display: flex;
-  flex-direction: column;
   background-color: #a8dadc;
   border: 1px solid #3dbd19;
   padding: 2px 6px;
@@ -214,6 +219,7 @@
   color: green;
   font-size: 1rem;
   cursor: pointer;
+
 }
 
 .vertical-buttons {
@@ -223,17 +229,10 @@
 }
 
 .habit-icons {
-  margin: 0;
-  padding: 0;
-  border: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  justify-content: center;
+  gap: 4px;
 }
-
 .duplicate-btn {
-  gap: 0;
   background: none;
   border: none;
   font-size: 1rem;
@@ -252,7 +251,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 1rem;
 }
 
 .modal-content {
@@ -261,12 +259,11 @@
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
+  min-width: 300px;
   animation: fadeIn 0.3s ease;
-  min-width: 15vw;
-  max-width: 70vw;
-  min-height: 100px;
-  padding: 2rem;
-  font-size: larger;
+  min-width: 60vw;
+  max-width: 95vw;
+  padding: 1rem;
 }
 
 @media (max-width: 600px) {
@@ -283,12 +280,12 @@
   gap: 1rem;
 }
 
-.confirm-btn, .cancel-btn {
+.confirm-btn,
+.cancel-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: medium;
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
@@ -340,3 +337,11 @@
     box-sizing: border-box;
   }
 }
+
+:root {
+  --cell-height: 50px;
+}
+
+/* .calendar-grid {
+  height: calc(var(--row-count) * var(--cell-height));
+} */

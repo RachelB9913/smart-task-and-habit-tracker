@@ -10,11 +10,15 @@ import "./SchedulePlanner.css";
 import "../Dashboard.css";
 import StatisticsPanel from "./StatisticsPanel";
 
+const hourStart = 6;
+const hourEnd = 18;
+const hours = Array.from({ length: hourEnd-hourStart+1 }, (_, i) => i + 6); // 6 to 23
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const timeBlocks = {
-  morning: [6, 7, 8, 9, 10, 11],
-  afternoon: [12, 13, 14, 15, 16, 17],
-  evening: [18, 19, 20, 21, 22, 23],
+  morning: [6, 7, 8, 9, 10],
+  noon: [11, 12, 13, 14],
+  evening: [17, 18, 19, 20, 21],
 };
 
 function getPreferredHours(preferredTime) {
@@ -172,7 +176,7 @@ export default function SchedulePlanner() {
   const [scheduledTasks, setScheduledTasks] = useState({});
   const [habitClones, setHabitClones] = useState([]); // [{ id: 'habit-1-copy-1', habitId: 1 }]
   const [showSaveModal, setShowSaveModal] = useState(false);
-  
+
   const [completedHabitIds, setCompletedHabitIds] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
     return stored.map(entry => entry.cloneId); // Use cloneId, not habitId
@@ -192,14 +196,9 @@ export default function SchedulePlanner() {
     setScheduledTasks(updatedSchedule);
   };
 
-  const [hourStart, setHourStart] = useState(6);
-  const [hourEnd, setHourEnd] = useState(22);
-  const hours = Array.from({ length: hourEnd - hourStart + 1 }, (_, i) => i + hourStart);
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
   useEffect(() => {
     document.documentElement.style.setProperty('--row-count', hourEnd - hourStart + 1);
-  }, [hourStart, hourEnd]);
+  }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");

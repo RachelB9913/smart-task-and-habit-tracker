@@ -34,15 +34,16 @@
 
 .planner-container {
   display: flex;
-  align-items: stretch;
   height: auto;
-  min-height: calc(var(--row-count) * var(--cell-height));
+  flex-wrap: wrap;
+  /* height: calc(100vh - 120px);  */
   font-family: 'Manrope', sans-serif;
 }
 
 .task-sidebar {
+  min-width: 180px;
+  max-width: 220px;
   flex-shrink: 0;
-  width: 200px;
   background: white;
   padding: 1rem;
   box-shadow: 2px 0 8px rgba(0,0,0,0.3);
@@ -61,57 +62,57 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-:root {
-  --cell-height: 62px;
-}
-
 .calendar-grid {
-  display: grid;
-  grid-template-rows: repeat(var(--row-count), 1fr);
-  height: calc(var(--row-count) * var(--cell-height));
   flex: 1;
   overflow: auto;
   margin: 1rem;
   border-radius: 1rem;
-  background: rgb(240, 240, 240);
+  background: white;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
-
 .grid-header {
-  display: grid;
-  grid-template-columns: 80px repeat(7, 1fr); /* hour + 7 days */
+  display: flex;
   background: #cfe2ff;
   font-weight: bold;
   border-bottom: 1px solid #ccc;
 }
 
 .grid-body .row {
-  display: grid;
-  grid-template-columns: 80px repeat(7, 1fr); /* same as above */
+  display: flex;
   border-bottom: 1px solid #eee;
 }
 
 .cell {
-  height: auto;
-  padding: 0.5rem;
-  border-right: 1px solid #ccc;
+  /* width: 120px; */
+  width: calc((100% - 80px) / 7);
+  height: 50px;
+  min-width: 120px;
+  min-height: 50px;
+  max-width: 120px;
+  max-height: 50px;
   overflow: hidden;
+  border-right: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 0.5rem;
 }
 
 .hour-cell {
+  background: #f9f9f9;
+  width: 80px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9f9f9;
-  font-weight: bold;
   border-right: 1px solid #ccc;
+  height: 50px; 
 }
 
 .time-slot {
   background-color: #c5b0b0;
   border-radius: 6px;
-  height: 56px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,13 +131,11 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 56px; 
+  height: 50px; 
   font-weight: 600;
 }
 
 .scheduled-task {
-  display: flex;
-  flex-direction: column;
   background-color: #a8dadc;
   border: 1px solid #3dbd19;
   padding: 2px 6px;
@@ -214,6 +213,7 @@
   color: green;
   font-size: 1rem;
   cursor: pointer;
+
 }
 
 .vertical-buttons {
@@ -223,17 +223,10 @@
 }
 
 .habit-icons {
-  margin: 0;
-  padding: 0;
-  border: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  justify-content: center;
+  gap: 4px;
 }
-
 .duplicate-btn {
-  gap: 0;
   background: none;
   border: none;
   font-size: 1rem;
@@ -252,7 +245,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 1rem;
 }
 
 .modal-content {
@@ -261,19 +253,8 @@
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
+  min-width: 300px;
   animation: fadeIn 0.3s ease;
-  min-width: 15vw;
-  max-width: 70vw;
-  min-height: 100px;
-  padding: 2rem;
-  font-size: larger;
-}
-
-@media (max-width: 600px) {
-  .modal-content {
-    min-width: 90vw;
-    padding: 0.5rem;
-  }
 }
 
 .modal-buttons {
@@ -283,12 +264,12 @@
   gap: 1rem;
 }
 
-.confirm-btn, .cancel-btn {
+.confirm-btn,
+.cancel-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: medium;
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
@@ -322,21 +303,4 @@
   background-color: gold;
   border-radius: 50%;
   padding: 0.3rem;
-}
-
-@media (max-width: 900px) {
-  .planner-container {
-    flex-direction: column;
-    height: auto;
-  }
-  .task-sidebar, .calendar-grid {
-    max-width: 100%;
-    margin: 0.5rem 0;
-  }
-  .stats-panel {
-    width: 100%;
-    max-width: 230px;
-    min-width: 180px;
-    box-sizing: border-box;
-  }
 }

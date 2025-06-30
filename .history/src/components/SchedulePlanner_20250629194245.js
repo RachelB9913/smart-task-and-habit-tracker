@@ -193,12 +193,12 @@ export default function SchedulePlanner() {
   };
 
   const [hourStart, setHourStart] = useState(6);
-  const [hourEnd, setHourEnd] = useState(22);
-  const hours = Array.from({ length: hourEnd - hourStart + 1 }, (_, i) => i + hourStart);
+  const [hourEnd, setHourEnd] = useState(23);
+  const hours = Array.from({ length: 18 }, (_, i) => i + hourStart);
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--row-count', hourEnd - hourStart + 1);
+    document.documentElement.style.setProperty('--row-count', 19);
   }, [hourStart, hourEnd]);
 
   useEffect(() => {

@@ -62,7 +62,7 @@
 }
 
 :root {
-  --cell-height: 62px;
+  --cell-height: 55.5px;
 }
 
 .calendar-grid {
@@ -130,7 +130,7 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 56px; 
+  height: 50px; 
   font-weight: 600;
 }
 

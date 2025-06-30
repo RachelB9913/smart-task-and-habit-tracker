@@ -62,7 +62,7 @@
 }
 
 :root {
-  --cell-height: 62px;
+  --cell-height: 55.5px;
 }
 
 .calendar-grid {
@@ -97,6 +97,7 @@
   padding: 0.5rem;
   border-right: 1px solid #ccc;
   overflow: hidden;
+  height: 56px;
 }
 
 .hour-cell {
@@ -111,7 +112,7 @@
 .time-slot {
   background-color: #c5b0b0;
   border-radius: 6px;
-  height: 56px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,7 +131,7 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 56px; 
+  height: 50px; 
   font-weight: 600;
 }
 

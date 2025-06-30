@@ -10,13 +10,6 @@ import "./SchedulePlanner.css";
 import "../Dashboard.css";
 import StatisticsPanel from "./StatisticsPanel";
 
-
-const timeBlocks = {
-  morning: [6, 7, 8, 9, 10, 11],
-  afternoon: [12, 13, 14, 15, 16, 17],
-  evening: [18, 19, 20, 21, 22, 23],
-};
-
 function getPreferredHours(preferredTime) {
   if (!preferredTime) return [];
   if (preferredTime.includes(":")) {
@@ -172,7 +165,7 @@ export default function SchedulePlanner() {
   const [scheduledTasks, setScheduledTasks] = useState({});
   const [habitClones, setHabitClones] = useState([]); // [{ id: 'habit-1-copy-1', habitId: 1 }]
   const [showSaveModal, setShowSaveModal] = useState(false);
-  
+
   const [completedHabitIds, setCompletedHabitIds] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("habitCompletions") || "[]");
     return stored.map(entry => entry.cloneId); // Use cloneId, not habitId
@@ -193,9 +186,8 @@ export default function SchedulePlanner() {
   };
 
   const [hourStart, setHourStart] = useState(6);
-  const [hourEnd, setHourEnd] = useState(22);
+  const [hourEnd, setHourEnd] = useState(23);
   const hours = Array.from({ length: hourEnd - hourStart + 1 }, (_, i) => i + hourStart);
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   useEffect(() => {
     document.documentElement.style.setProperty('--row-count', hourEnd - hourStart + 1);

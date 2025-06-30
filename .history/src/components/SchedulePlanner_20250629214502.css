@@ -62,7 +62,7 @@
 }
 
 :root {
-  --cell-height: 62px;
+  --cell-height: 60px;
 }
 
 .calendar-grid {
