@@ -36,7 +36,7 @@
   display: flex;
   align-items: stretch;
   height: auto;
-  min-height: calc((var(--row-count) + 1) * var(--cell-height));
+  min-height: calc(var(--row-count) * var(--cell-height));
   font-family: 'Manrope', sans-serif;
 }
 
@@ -68,7 +68,7 @@
 .calendar-grid {
   display: grid;
   grid-template-rows: repeat(var(--row-count), 1fr);
-  height: calc((var(--row-count) + 1) * var(--cell-height));
+  height: calc(var(--row-count) * var(--cell-height));
   flex: 1;
   overflow: auto;
   margin: 1rem;
@@ -130,7 +130,7 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 62px; 
+  height: --cell-height;
   font-weight: 600;
 }
 

@@ -381,9 +381,6 @@ useEffect(() => {
                 max={23}
                 onChange={(e) => setEndHour(Number(e.target.value))}
               />
-              {hourErrors.endHour && (
-                <p className="validation-error">{hourErrors.endHour}</p>
-              )}
             </label>
             <button type="submit">Save</button>
           </form>

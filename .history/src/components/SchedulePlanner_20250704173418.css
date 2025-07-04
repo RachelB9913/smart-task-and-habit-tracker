@@ -36,7 +36,7 @@
   display: flex;
   align-items: stretch;
   height: auto;
-  min-height: calc((var(--row-count) + 1) * var(--cell-height));
+  min-height: calc(var(--row-count) * var(--cell-height));
   font-family: 'Manrope', sans-serif;
 }
 
@@ -68,7 +68,7 @@
 .calendar-grid {
   display: grid;
   grid-template-rows: repeat(var(--row-count), 1fr);
-  height: calc((var(--row-count) + 1) * var(--cell-height));
+  height: calc(var(--row-count) * var(--cell-height));
   flex: 1;
   overflow: auto;
   margin: 1rem;
@@ -130,7 +130,7 @@
   text-align: center;
   background: #cfe2ff;
   border-right: 1px solid #ccc;
-  height: 62px; 
+  height: 56px; 
   font-weight: 600;
 }
 
@@ -171,6 +171,15 @@
   border: 1px solid #3dbd19 !important; 
 }
 
+/* .remove-btn {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: 0rem;
+  margin-right: 0.6rem;
+} */
+
 .grayed-out {
   opacity: 0.5;
   pointer-events: none;
@@ -198,6 +207,13 @@
   margin-bottom: 1rem;
 }
 
+/* .mark-done-btn {
+  background: none;
+  border: none;
+  color: green;
+  font-size: 1rem;
+  cursor: pointer;
+} */
 
 .vertical-buttons {
   display: flex;
@@ -230,6 +246,24 @@
   align-items: center;
   gap: 2px;
 }
+
+/* .habit-icons {
+  margin: 0;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  justify-content: center;
+} */
+
+/* .duplicate-btn {
+  gap: 0;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+} */
 
 .modal-overlay {
   position: fixed;
