@@ -4,9 +4,6 @@ import com.example.demo.dto.HabitDTO;
 import com.example.demo.entity.Habit;
 import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
-
-import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +32,7 @@ public class HabitController {
     }
 
     @PostMapping
-    public HabitDTO createHabit(@Valid @RequestBody HabitDTO dto) {
+    public HabitDTO createHabit(@RequestBody HabitDTO dto) {
         System.out.println("HabitController POST hit");
 
         Habit habit = new Habit();
@@ -43,7 +40,6 @@ public class HabitController {
         habit.setTitle(dto.getTitle());
         habit.setFrequency(dto.getFrequency());
         habit.setPreferredTime(dto.getPreferredTime());
-        habit.setStatus(dto.getStatus());
         habit.setDescription(dto.getDescription());
 
         userRepository.findById(dto.getUserId()).ifPresent(habit::setUser);
@@ -55,7 +51,6 @@ public class HabitController {
             saved.getTitle(),
             saved.getFrequency(),
             saved.getPreferredTime(),
-            saved.getStatus(),
             saved.getUser().getId(),
             saved.getDescription()
         );
@@ -70,7 +65,6 @@ public class HabitController {
             dto.setTitle(habit.getTitle());
             dto.setFrequency(habit.getFrequency());
             dto.setPreferredTime(habit.getPreferredTime());
-            dto.setStatus(habit.getStatus());
             dto.setUserId(habit.getUser().getId()); 
 
             return dto;
@@ -89,7 +83,6 @@ public class HabitController {
         dto.setTitle(saved.getTitle());
         dto.setFrequency(saved.getFrequency());
         dto.setPreferredTime(saved.getPreferredTime());
-        dto.setStatus(saved.getStatus());
         dto.setUserId(saved.getUser().getId());
 
         return ResponseEntity.ok(dto);
@@ -125,7 +118,6 @@ public class HabitController {
         existing.setDescription(updatedHabit.getDescription());
         existing.setFrequency(updatedHabit.getFrequency());
         existing.setPreferredTime(updatedHabit.getPreferredTime());
-        existing.setStatus(updatedHabit.getStatus());
 
         habitRepository.save(existing);
         return ResponseEntity.ok(HabitMapper.toDto(existing));

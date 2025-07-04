@@ -118,8 +118,8 @@ export default function Register() {
                 onChange={handleChange}
               />
             </label>
-            {validationErrors.endHour && (
-              <p className="validation-error">{validationErrors.endHour}</p>
+            {validationErrors.password && (
+              <p className="validation-error">{validationErrors.password}</p>
             )}
 
             <div className="button-group">

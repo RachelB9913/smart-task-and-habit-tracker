@@ -7,22 +7,21 @@ public class HabitDTO {
     private Long id; // Optional, if you want to return the ID after creation
 
     @NotBlank(message = "Habit title is required")
-    @Size(max = 100, message = "Habit title must be under 100 characters")
+    @Size(max = 50, message = "Habit title must be under 100 characters")
     private String title;
+    
     private String frequency; // always String
     private String preferredTime;
-    private String status; 
     private Long userId;
     private String description;
 
     public HabitDTO() {}
 
-    public HabitDTO(Long id, String title, String frequency, String preferredTime, String status, Long userId, String description) {
+    public HabitDTO(Long id, String title, String frequency, String preferredTime, Long userId, String description) {
         this.id = id;
         this.title = title;
         this.frequency = frequency;
         this.preferredTime = preferredTime;
-        this.status = status;
         this.userId = userId;
         this.description = description;
     }
@@ -39,9 +38,6 @@ public class HabitDTO {
 
     public String getPreferredTime() { return preferredTime; }
     public void setPreferredTime(String preferredTime) { this.preferredTime = preferredTime; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }

@@ -118,9 +118,6 @@ export default function Register() {
                 onChange={handleChange}
               />
             </label>
-            {validationErrors.endHour && (
-              <p className="validation-error">{validationErrors.endHour}</p>
-            )}
 
             <div className="button-group">
               <button type="submit">Sign up</button>

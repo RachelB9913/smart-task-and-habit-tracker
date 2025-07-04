@@ -1,7 +1,6 @@
 // AuthController.java
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
@@ -30,7 +29,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        System.out.println("Register request received");
         if (userRepository.findByUsername(request.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
@@ -47,14 +45,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody AuthRequest loginData) {
-        System.out.println("Login request received");
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody User loginData) {
         User user = userRepository.findByUsername(loginData.getUsername());
 
         if (user == null || !passwordEncoder.matches(loginData.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
         }
 
+        // Return both username and userId
         Map<String, Object> response = new HashMap<>();
         response.put("username", user.getUsername());
         response.put("userId", user.getId());

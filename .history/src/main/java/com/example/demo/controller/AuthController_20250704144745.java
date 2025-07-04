@@ -30,7 +30,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        System.out.println("Register request received");
         if (userRepository.findByUsername(request.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
@@ -48,7 +47,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody AuthRequest loginData) {
-        System.out.println("Login request received");
         User user = userRepository.findByUsername(loginData.getUsername());
 
         if (user == null || !passwordEncoder.matches(loginData.getPassword(), user.getPassword())) {

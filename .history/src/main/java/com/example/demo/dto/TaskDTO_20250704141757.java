@@ -12,7 +12,7 @@ public class TaskDTO {
     @Size(max = 50, message = "Task title must be under 100 characters")
     private String title;
 
-    @Size(max = 150)
+    @Size(max = 200)
     private String description;
     private String priority;
     private String status;

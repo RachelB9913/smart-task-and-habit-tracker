@@ -67,9 +67,6 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-            {validationErrors.username && (
-              <p className="validation-error">{validationErrors.username}</p>
-            )}
 
             <input
               type="email"
@@ -79,9 +76,6 @@ export default function Register() {
               onChange={handleChange}
               required
             />
-            {validationErrors.email && (
-              <p className="validation-error">{validationErrors.email}</p>
-            )}
 
             <input
               type="password"
@@ -92,7 +86,7 @@ export default function Register() {
               required
             />
             {validationErrors.password && (
-              <p className="validation-error">{validationErrors.password}</p>
+              <p className="text-red-500 text-sm">{validationErrors.password}</p>
             )}
 
             <label>
@@ -118,9 +112,6 @@ export default function Register() {
                 onChange={handleChange}
               />
             </label>
-            {validationErrors.endHour && (
-              <p className="validation-error">{validationErrors.endHour}</p>
-            )}
 
             <div className="button-group">
               <button type="submit">Sign up</button>

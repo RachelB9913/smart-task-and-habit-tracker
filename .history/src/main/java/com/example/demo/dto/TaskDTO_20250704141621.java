@@ -9,10 +9,10 @@ public class TaskDTO {
     private Long id; // Assuming you want to include an ID for the task
 
     @NotBlank(message = "Task title is required")
-    @Size(max = 50, message = "Task title must be under 100 characters")
+    @Size(max = 100, message = "Task title must be under 100 characters")
     private String title;
 
-    @Size(max = 150)
+    @Size(max = 200)
     private String description;
     private String priority;
     private String status;

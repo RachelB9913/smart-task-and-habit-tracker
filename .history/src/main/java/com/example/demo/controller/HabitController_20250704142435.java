@@ -4,9 +4,6 @@ import com.example.demo.dto.HabitDTO;
 import com.example.demo.entity.Habit;
 import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
-
-import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +32,7 @@ public class HabitController {
     }
 
     @PostMapping
-    public HabitDTO createHabit(@Valid @RequestBody HabitDTO dto) {
+    public HabitDTO createHabit(@RequestBody HabitDTO dto) {
         System.out.println("HabitController POST hit");
 
         Habit habit = new Habit();
