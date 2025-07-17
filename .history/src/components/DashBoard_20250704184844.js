@@ -256,19 +256,10 @@ useEffect(() => {
 
       const method = editingHabitId ? "PUT" : "POST";
 
-      // const response = await fetch(url, {
-      //   method,
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ ...newHabit, userId })
-      // });
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...newHabit,
-          userId,
-          status: "Active" // optional, set default if not already included
-        }),
+        body: JSON.stringify({ ...newHabit, userId })
       });
 
       if (!response.ok) throw new Error("Failed to save habit");

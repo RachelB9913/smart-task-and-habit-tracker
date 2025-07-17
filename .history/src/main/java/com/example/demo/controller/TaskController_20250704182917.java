@@ -5,12 +5,16 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.validation.Valid;
+
 import com.example.demo.mapper.TaskMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +31,7 @@ public class TaskController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody TaskDTO dto) {
+    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskDTO dto) {
         Task task = new Task();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
@@ -42,6 +46,10 @@ public class TaskController {
 
         Task saved = taskRepository.save(task);
         return ResponseEntity.ok(saved);
+    }
+
+    private boolean isOwner(Task task, Long userId) {
+        return task != null && task.getUser() != null && task.getUser().getId().equals(userId);
     }
 
     @PostMapping("/user/{userId}")
@@ -62,12 +70,27 @@ public class TaskController {
         return ResponseEntity.ok(dto);
     }
 
+    // @GetMapping("/{id}")
+    // public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+    //     Task task = taskRepository.findById(id)
+    //         .orElseThrow(() -> new RuntimeException("Task not found"));
+    //     if (task == null) return ResponseEntity.notFound().build();
+    //     if (!isOwner(task, id)) {
+    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    //     }
+    //     TaskDTO dto = TaskMapper.toDto(task);
+    //     return ResponseEntity.ok(dto);
+    // }
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        Task task = taskRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Task not found"));
-        TaskDTO dto = TaskMapper.toDto(task);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<?> getTask(@PathVariable Long id, @RequestParam Long userId) {
+        Task task = taskRepository.findById(id).orElse(null);
+        if (task == null) return ResponseEntity.notFound().build();
+
+        if (!isOwner(task, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your task");
+        }
+
+        return ResponseEntity.ok(task);
     }
 
     @GetMapping("/user/{userId}")
@@ -114,23 +137,22 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
-        Optional<Task> existingOpt = taskRepository.findById(id);
-        if (existingOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        Task existing = taskRepository.findById(id).orElse(null);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        if (!isOwner(existing, taskDTO.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your task");
         }
 
-        Task existing = existingOpt.get();
-        existing.setTitle(updatedTask.getTitle());
-        existing.setDescription(updatedTask.getDescription());
-        existing.setPriority(updatedTask.getPriority());
-        existing.setStatus(updatedTask.getStatus());
-        existing.setDueDate(updatedTask.getDueDate());
-        existing.setScheduledTime(updatedTask.getScheduledTime());
+        existing.setTitle(taskDTO.getTitle());
+        existing.setDescription(taskDTO.getDescription());
+        existing.setScheduledTime(taskDTO.getScheduledTime());
+        existing.setStatus(taskDTO.getStatus());
 
-        taskRepository.save(existing);
-        return ResponseEntity.ok(TaskMapper.toDto(existing));
+        return ResponseEntity.ok(taskRepository.save(existing));
     }
+
 
     @PutMapping("/{id}/schedule")
     public ResponseEntity<TaskDTO> scheduleTask(
@@ -146,5 +168,4 @@ public class TaskController {
         Task updated = taskRepository.save(task);
         return ResponseEntity.ok(TaskMapper.toDto(updated));
     }
-
 }

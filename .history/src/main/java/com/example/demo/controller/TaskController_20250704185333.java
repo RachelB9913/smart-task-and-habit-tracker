@@ -27,7 +27,7 @@ public class TaskController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody TaskDTO dto) {
+    public ResponseEntity<Task> createTask(z@RequestBody TaskDTO dto) {
         Task task = new Task();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());

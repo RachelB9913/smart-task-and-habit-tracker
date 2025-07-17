@@ -2,10 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.HabitDTO;
 import com.example.demo.entity.Habit;
+import com.example.demo.entity.Task;
 import com.example.demo.repository.HabitRepository;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.demo.entity.User;
@@ -27,12 +32,12 @@ public class HabitController {
     @Autowired
     private UserRepository userRepository;
 
-    public HabitController() {
-        System.out.println("abitController has been loaded!"); 
+    private boolean isOwner(Habit habit, Long userId) {
+        return habit != null && habit.getUser() != null && habit.getUser().getId().equals(userId);
     }
 
     @PostMapping
-    public HabitDTO createHabit(@RequestBody HabitDTO dto) {
+    public HabitDTO createHabit(@Valid @RequestBody HabitDTO dto) {
         System.out.println("HabitController POST hit");
 
         Habit habit = new Habit();
@@ -92,40 +97,53 @@ public class HabitController {
         return ResponseEntity.ok(dto);
     }
 
+    // @GetMapping("/{id}")
+    // public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
+    //     Habit habit = habitRepository.findById(id)
+    //         .orElseThrow(() -> new RuntimeException("Habit not found"));
+    //     HabitDTO dto = HabitMapper.toDto(habit);
+    //     return ResponseEntity.ok(dto);
+    // }
     @GetMapping("/{id}")
-    public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
-        Habit habit = habitRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Habit not found"));
-        HabitDTO dto = HabitMapper.toDto(habit);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<?> getHabit(@PathVariable Long id, @RequestParam Long userId) {
+        Habit habit = habitRepository.findById(id).orElse(null);
+        if (habit == null) return ResponseEntity.notFound().build();
+
+        if (!isOwner(habit, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your habit");
+        }
+
+        return ResponseEntity.ok(habit);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHabitById(@PathVariable Long id) {
-        if (habitRepository.existsById(id)) {
-            habitRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> deleteHabit(@PathVariable Long id, @RequestParam Long userId) {
+        Habit habit = habitRepository.findById(id).orElse(null);
+        if (habit == null) return ResponseEntity.notFound().build();
+
+        if (!isOwner(habit, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your habit");
         }
+
+        habitRepository.delete(habit);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HabitDTO> updateHabit(@PathVariable Long id, @RequestBody Habit updatedHabit) {
-        Optional<Habit> existingOpt = habitRepository.findById(id);
-        if (existingOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateHabit(@PathVariable Long id, @RequestBody Habit updatedHabit) {
+        Habit existing = habitRepository.findById(id).orElse(null);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        if (!isOwner(existing, updatedHabit.getUser().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your habit");
         }
 
-        Habit existing = existingOpt.get();
         existing.setTitle(updatedHabit.getTitle());
         existing.setDescription(updatedHabit.getDescription());
         existing.setFrequency(updatedHabit.getFrequency());
         existing.setPreferredTime(updatedHabit.getPreferredTime());
-        existing.setStatus(updatedHabit.getStatus());
 
-        habitRepository.save(existing);
-        return ResponseEntity.ok(HabitMapper.toDto(existing));
+        return ResponseEntity.ok(habitRepository.save(existing));
     }
 
     @PatchMapping("/{id}/status")
@@ -142,4 +160,5 @@ public class HabitController {
 
         return ResponseEntity.ok(HabitMapper.toDto(habit));
     }
+
 }

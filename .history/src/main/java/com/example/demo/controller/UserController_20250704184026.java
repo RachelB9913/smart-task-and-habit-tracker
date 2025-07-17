@@ -6,8 +6,14 @@ import com.example.demo.entity.Habit;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.repository.HabitRepository;
+import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +29,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private HabitRepository habitRepository;
+   
     // GET /api/users
     @GetMapping
     public List<UserDTO> getAllUsers() {
@@ -45,13 +57,24 @@ public class UserController {
     }
 
     // GET /api/users/{id}
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+    // @GetMapping("/{id}")
+    // public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    //     User user = userRepository.findById(id)
+    //         .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(UserMapper.toDTO(user));
+    //     return ResponseEntity.ok(UserMapper.toDTO(user));
+    // }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id, @RequestParam Long userId) {
+        if (!id.equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: not your account");
+        }
+
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
     }
+
 
     // DELETE /api/users/{id}
     @DeleteMapping("/{id}")
@@ -77,16 +100,40 @@ public class UserController {
         }
     }
 
+    // @PutMapping("/update-hours")
+    // public ResponseEntity<String> updateUserHours(@Valid @RequestBody UpdateHoursRequest request) {
+    //     User user = userRepository.findById(request.getUserId())
+    //         .orElseThrow(() -> new RuntimeException("User not found"));
+
+    //     user.setStartHour(request.getStartHour());
+    //     user.setEndHour(request.getEndHour());
+    //     userRepository.save(user);
+
+    //     return ResponseEntity.ok("Hours updated successfully");
+    // }
     @PutMapping("/update-hours")
-    public ResponseEntity<String> updateUserHours(@RequestBody UpdateHoursRequest request) {
-        User user = userRepository.findById(request.getUserId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> updateHours(@Valid @RequestBody UpdateHoursRequest request) {
+        User user = userRepository.findById(request.getUserId()).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+
+        if (!user.getId().equals(request.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: cannot update another user's hours");
+        }
 
         user.setStartHour(request.getStartHour());
         user.setEndHour(request.getEndHour());
-        userRepository.save(user);
 
-        return ResponseEntity.ok("Hours updated successfully");
+        return ResponseEntity.ok(userRepository.save(user));
+    }
+
+    @GetMapping("/{id}/tasks")
+    public ResponseEntity<List<Task>> getUserTasks(@PathVariable Long id) {
+        return ResponseEntity.ok(taskRepository.findByUserId(id));
+    }
+
+    @GetMapping("/{id}/habits")
+    public ResponseEntity<List<Habit>> getUserHabits(@PathVariable Long id) {
+        return ResponseEntity.ok(habitRepository.findByUserId(id));
     }
 
 }
