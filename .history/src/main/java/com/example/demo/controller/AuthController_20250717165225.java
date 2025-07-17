@@ -12,14 +12,12 @@ import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,11 +81,10 @@ public class AuthController {
         );
 
         // Load user
-        Optional<User> userOpt = userRepository.findByEmail(loginData.getUsername());
-        if (userOpt.isEmpty()) {
-            userOpt = userRepository.findByUsername(loginData.getUsername());
+        User user = userRepository.findByUsername(loginData.getUsername());
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
         }
-        User user = userOpt.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // Build Spring Security UserDetails object for JWT
         UserDetails userDetails = org.springframework.security.core.userdetails.User
