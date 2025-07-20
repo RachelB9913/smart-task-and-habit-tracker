@@ -402,9 +402,7 @@ export default function SchedulePlanner() {
       tasks.map(task =>
         fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json",
-                      'Authorization': `Bearer ${localStorage.getItem("token")}`
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ scheduledTime: null })
         })
       )
@@ -414,9 +412,7 @@ export default function SchedulePlanner() {
     tasks.map(task =>
       fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json",
-                  'Authorization': `Bearer ${localStorage.getItem("token")}`
-         },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "In Progress" })
       })
     )
@@ -694,9 +690,7 @@ export default function SchedulePlanner() {
                                                   updateScheduledCount(id, "task", "add");
                                                   fetch(`http://localhost:8080/api/tasks/${task.id}/status`, {
                                                     method: "PATCH",
-                                                    headers: { "Content-Type": "application/json" ,
-                                                              'Authorization': `Bearer ${localStorage.getItem("token")}`
-                                                    },
+                                                    headers: { "Content-Type": "application/json" },
                                                     body: JSON.stringify({ status: "Done" }),
                                                   })
                                                     .then((res) => res.text())
@@ -735,9 +729,7 @@ export default function SchedulePlanner() {
                                                   });
                                                   fetch(`http://localhost:8080/api/tasks/${task.id}/schedule`, {
                                                     method: "PUT",
-                                                    headers: { "Content-Type": "application/json" ,
-                                                              'Authorization': `Bearer ${localStorage.getItem("token")}`
-                                                    },
+                                                    headers: { "Content-Type": "application/json" },
                                                     body: JSON.stringify({ scheduledTime: null }),
                                                   })
                                                     .then((res) => res.json())
