@@ -46,10 +46,19 @@ public class UserController {
         }).collect(Collectors.toList());
     }
 
+    // GET /api/users/{id}
+    // @GetMapping("/{id}")
+    // public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    //     User user = userRepository.findById(id)
+    //         .orElseThrow(() -> new RuntimeException("User not found"));
+
+    //     return ResponseEntity.ok(UserMapper.toDTO(user));
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
-        String email = UserUtils.getCurrentUsername();  // Get current logged-in email
+        // Get current logged-in email
+        String email = UserUtils.getCurrentUsername();
 
         // Get the user making the request
         User currentUser = userRepository.findByEmail(email)

@@ -101,12 +101,12 @@ public class HabitController {
     }   
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<?> addHabitForUser(@PathVariable Long userId, @RequestBody Habit habit) {
+    public ResponseEntity<HabitDTO> addHabitForUser(@PathVariable Long userId, @RequestBody Habit habit) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         habit.setUser(user);
         Habit saved = habitRepository.save(habit);
         if (!isCurrentUserOwner(saved)) {
-            return ResponseEntity.status(403).body("You are not authorized to create this habit.");
+            return ResponseEntity.status(403).build();
         }
         HabitDTO dto = new HabitDTO();
         dto.setId(saved.getId());
@@ -120,12 +120,12 @@ public class HabitController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getHabitById(@PathVariable Long id) {
+    public ResponseEntity<HabitDTO> getHabitById(@PathVariable Long id) {
         Habit habit = habitRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Habit not found"));
         
         if (!isCurrentUserOwner(habit)) {
-            return ResponseEntity.status(403).body("You are not authorized to access this habit.");
+            return ResponseEntity.status(403).build();
         }
 
         HabitDTO dto = HabitMapper.toDto(habit);
@@ -133,21 +133,21 @@ public class HabitController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteHabitById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteHabitById(@PathVariable Long id) {
         Optional<Habit> optionalHabit = habitRepository.findById(id);
         if (optionalHabit.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Habit habit = optionalHabit.get();
         if (!isCurrentUserOwner(habit)) {
-            return ResponseEntity.status(403).body("You are not authorized to delete this habit.");
+            return ResponseEntity.status(403).build();
         }
         habitRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateHabit(@PathVariable Long id, @RequestBody Habit updatedHabit) {
+    public ResponseEntity<HabitDTO> updateHabit(@PathVariable Long id, @RequestBody Habit updatedHabit) {
         Optional<Habit> existingOpt = habitRepository.findById(id);
         if (existingOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -155,7 +155,7 @@ public class HabitController {
 
         Habit existing = existingOpt.get();
         if (!isCurrentUserOwner(existing)) {
-            return ResponseEntity.status(403).body("You are not authorized to update this habit.");
+            return ResponseEntity.status(403).build();
         }
         existing.setTitle(updatedHabit.getTitle());
         existing.setDescription(updatedHabit.getDescription());
@@ -168,7 +168,7 @@ public class HabitController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateHabitStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+    public ResponseEntity<HabitDTO> updateHabitStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         Optional<Habit> optionalTask = habitRepository.findById(id);
         if (optionalTask.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -176,7 +176,7 @@ public class HabitController {
 
         Habit habit = optionalTask.get();
         if (!isCurrentUserOwner(habit)) {
-            return ResponseEntity.status(403).body("You are not authorized to update this habit.");
+            return ResponseEntity.status(403).build();
         }
         String status = payload.get("status");
         habit.setStatus(status);

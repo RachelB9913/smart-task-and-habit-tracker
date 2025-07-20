@@ -62,7 +62,7 @@ public class TaskController {
     }
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<?> addTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
+    public ResponseEntity<TaskDTO> addTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
 
         String email = UserUtils.getCurrentUsername();
         User currentUser = userRepository.findByEmail(email)
@@ -88,12 +88,12 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         Task task = taskRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Task not found"));
         
         if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).body("You are not authorized to access this task.");
+            return ResponseEntity.status(403).build();
         }
 
         TaskDTO dto = TaskMapper.toDto(task);
@@ -130,7 +130,7 @@ public class TaskController {
     }   
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTaskById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -138,7 +138,7 @@ public class TaskController {
         Task task = optionalTask.get();
 
         if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).body("You are not authorized to delete this task.");
+            return ResponseEntity.status(403).build();
         }
 
         taskRepository.deleteById(id);

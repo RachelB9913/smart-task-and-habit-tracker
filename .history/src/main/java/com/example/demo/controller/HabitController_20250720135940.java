@@ -168,7 +168,7 @@ public class HabitController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateHabitStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+    public ResponseEntity<HabitDTO> updateHabitStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         Optional<Habit> optionalTask = habitRepository.findById(id);
         if (optionalTask.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -176,7 +176,7 @@ public class HabitController {
 
         Habit habit = optionalTask.get();
         if (!isCurrentUserOwner(habit)) {
-            return ResponseEntity.status(403).body("You are not authorized to update this habit.");
+            return ResponseEntity.status(403).build();
         }
         String status = payload.get("status");
         habit.setStatus(status);

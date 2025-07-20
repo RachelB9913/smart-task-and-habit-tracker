@@ -28,23 +28,8 @@ public class TaskController {
     @Autowired
     private UserRepository userRepository;
 
-    private boolean isCurrentUserOwner(Task task) {
-        String email = UserUtils.getCurrentUsername();
-        User currentUser = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return task.getUser().getId().equals(currentUser.getId());
-    }
-
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody TaskDTO dto) {
-        
-        String email = UserUtils.getCurrentUsername();
-        User currentUser = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!currentUser.getId().equals(dto.getUserId())) {
-            throw new RuntimeException("You can only create habits for yourself.");
-        }
-        
         Task task = new Task();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
@@ -62,14 +47,14 @@ public class TaskController {
     }
 
     @PostMapping("/user/{userId}")
-    public ResponseEntity<?> addTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
+    public ResponseEntity<TaskDTO> addTaskForUser(@PathVariable Long userId, @RequestBody Task task) {
 
         String email = UserUtils.getCurrentUsername();
         User currentUser = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (!currentUser.getId().equals(userId)) {
-            return ResponseEntity.status(403).body("You can only add tasks for yourself.");
+            return ResponseEntity.status(403).build();
         }
 
         task.setUser(currentUser);
@@ -88,14 +73,17 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         Task task = taskRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Task not found"));
         
-        if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).body("You are not authorized to access this task.");
-        }
+        String email = UserUtils.getCurrentUsername();
+        User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        if (!task.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(403).build();
+        }
         TaskDTO dto = TaskMapper.toDto(task);
         return ResponseEntity.ok(dto);
     }
@@ -129,22 +117,49 @@ public class TaskController {
         return ResponseEntity.ok(dtos);
     }   
 
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
+    //     if (taskRepository.existsById(id)) {
+    //         taskRepository.deleteById(id);
+    //         return ResponseEntity.noContent().build();
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTaskById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Task task = optionalTask.get();
 
-        if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).body("You are not authorized to delete this task.");
+        String email = UserUtils.getCurrentUsername();
+        User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!task.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(403).build();
         }
 
         taskRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+    // @PatchMapping("/{id}/status")
+    // public ResponseEntity<TaskDTO> updateTaskStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+    //     Optional<Task> optionalTask = taskRepository.findById(id);
+    //     if (optionalTask.isEmpty()) {
+    //         return ResponseEntity.notFound().build();
+    //     }
+
+    //     Task task = optionalTask.get();
+    //     String status = payload.get("status");
+    //     task.setStatus(status);
+    //     taskRepository.save(task);
+
+    //     return ResponseEntity.ok(TaskMapper.toDto(task));
+    // }
     @PatchMapping("/{id}/status")
     public ResponseEntity<TaskDTO> updateTaskStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         Optional<Task> optionalTask = taskRepository.findById(id);
@@ -154,7 +169,11 @@ public class TaskController {
 
         Task task = optionalTask.get();
 
-        if (!isCurrentUserOwner(task)) {
+        String email = UserUtils.getCurrentUsername();
+        User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!task.getUser().getId().equals(currentUser.getId())) {
             return ResponseEntity.status(403).build();
         }
 
@@ -173,11 +192,6 @@ public class TaskController {
         }
 
         Task existing = existingOpt.get();
-
-        if (!isCurrentUserOwner(existing)) {
-            return ResponseEntity.status(403).build();
-        }
-
         existing.setTitle(updatedTask.getTitle());
         existing.setDescription(updatedTask.getDescription());
         existing.setPriority(updatedTask.getPriority());
@@ -199,11 +213,6 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
         Task task = optionalTask.get();
-
-        if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).build();
-        }
-
         task.setScheduledTime(scheduledTime);
         Task updated = taskRepository.save(task);
         return ResponseEntity.ok(TaskMapper.toDto(updated));

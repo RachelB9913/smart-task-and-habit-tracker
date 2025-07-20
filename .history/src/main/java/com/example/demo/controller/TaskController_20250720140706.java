@@ -110,7 +110,7 @@ public class TaskController {
 
         // Compare userId to authenticated user ID
         if (!currentUser.getId().equals(userId)) {
-            return ResponseEntity.status(403).body(null);
+            return ResponseEntity.status(403).body("You are not authorized to access tasks for this user.");
         }
         
         List<Task> tasks = taskRepository.findByUserId(userId);
@@ -130,7 +130,7 @@ public class TaskController {
     }   
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTaskById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -138,7 +138,7 @@ public class TaskController {
         Task task = optionalTask.get();
 
         if (!isCurrentUserOwner(task)) {
-            return ResponseEntity.status(403).body("You are not authorized to delete this task.");
+            return ResponseEntity.status(403).build();
         }
 
         taskRepository.deleteById(id);
