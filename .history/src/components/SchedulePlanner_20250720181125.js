@@ -210,13 +210,11 @@ export default function SchedulePlanner() {
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    
     if (!userId) return;
 
-    const token = localStorage.getItem("token");
     fetch(`http://localhost:8080/api/users/${userId}` ,{
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then(res => res.json())
@@ -224,10 +222,10 @@ export default function SchedulePlanner() {
         const taskDetails = await Promise.all(
           (userData.taskIds || []).map(id =>
             fetch(`http://localhost:8080/api/tasks/${id}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-              },
-            }).then(res => res.json())
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          }).then(res => res.json())
           )
         );
         setTasks(taskDetails);
@@ -235,11 +233,7 @@ export default function SchedulePlanner() {
 
         const habitDetails = await Promise.all(
           (userData.habitIds || []).map(id =>
-            fetch(`http://localhost:8080/api/habits/${id}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-              },
-            }).then(res => res.json())
+            fetch(`http://localhost:8080/api/habits/${id}`).then(res => res.json())
           )
         );
         setHabits(habitDetails);
@@ -301,10 +295,7 @@ export default function SchedulePlanner() {
       if (!draggableId.startsWith("habit-")) {
         fetch(`http://localhost:8080/api/tasks/${draggableId}/schedule`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ scheduledTime: destination.droppableId }),
         })
           .then((res) => res.json())

@@ -303,7 +303,7 @@ export default function SchedulePlanner() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({ scheduledTime: destination.droppableId }),
         })
