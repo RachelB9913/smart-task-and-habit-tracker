@@ -32,7 +32,7 @@ export default function Login() {
                 password: formData.password
                 })
             });
-            console.log("here");
+
             if (response.ok) {
                 const data = await response.json();
                 alert('Login success: ' + data.username + ' (' + data.userId + ')');

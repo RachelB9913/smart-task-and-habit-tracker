@@ -156,10 +156,7 @@ useEffect(() => {
         // Fetch full task objects
         const taskDetails = await Promise.all(
           (userData.taskIds || []).map(id =>
-            fetch(`http://localhost:8080/api/tasks/${id}`, {
-              headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-            })
-            .then(res => res.json())
+            fetch(`http://localhost:8080/api/tasks/${id}`).then(res => res.json())
           )
         );
         setTasks(taskDetails);
@@ -186,10 +183,7 @@ useEffect(() => {
         // Fetch full habit objects
         const habitDetails = await Promise.all(
           (userData.habitIds || []).map(id =>
-            fetch(`http://localhost:8080/api/habits/${id}`, {
-              headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-            })
-            .then(res => res.json())
+            fetch(`http://localhost:8080/api/habits/${id}`).then(res => res.json())
           )
         );
         setHabits(habitDetails);
@@ -208,10 +202,11 @@ useEffect(() => {
     const newStatus = currentStatus === "Done" ? "In Progress" : "Done";
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:8080/api/tasks/${taskId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${token}`
                 },
         body: JSON.stringify({ status: newStatus })
       });

@@ -24,7 +24,7 @@ export default function Login() {
         e.preventDefault();
         console.log("Login form submitted");
         try {
-            const response = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -32,7 +32,7 @@ export default function Login() {
                 password: formData.password
                 })
             });
-            console.log("here");
+
             if (response.ok) {
                 const data = await response.json();
                 alert('Login success: ' + data.username + ' (' + data.userId + ')');

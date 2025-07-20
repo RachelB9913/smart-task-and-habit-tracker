@@ -119,9 +119,7 @@ export default function Dashboard() {
 useEffect(() => {
   const fetchUser = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-      });
+      const res = await fetch(`http://localhost:8080/api/users/${userId}`);
       const data = await res.json();
 
       const safeStart = data.startHour ?? 6;
@@ -144,9 +142,7 @@ useEffect(() => {
   useEffect(() => {
     if (!userId) return;
 
-    fetch(`http://localhost:8080/api/users/${userId}` ,{
-        headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-      })
+    fetch(`http://localhost:8080/api/users/${userId}`)
       .then(res => res.json())
       .then(async (userData) => {
         // Optionally reset state
@@ -156,10 +152,7 @@ useEffect(() => {
         // Fetch full task objects
         const taskDetails = await Promise.all(
           (userData.taskIds || []).map(id =>
-            fetch(`http://localhost:8080/api/tasks/${id}`, {
-              headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-            })
-            .then(res => res.json())
+            fetch(`http://localhost:8080/api/tasks/${id}`).then(res => res.json())
           )
         );
         setTasks(taskDetails);
@@ -186,10 +179,7 @@ useEffect(() => {
         // Fetch full habit objects
         const habitDetails = await Promise.all(
           (userData.habitIds || []).map(id =>
-            fetch(`http://localhost:8080/api/habits/${id}`, {
-              headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-            })
-            .then(res => res.json())
+            fetch(`http://localhost:8080/api/habits/${id}`).then(res => res.json())
           )
         );
         setHabits(habitDetails);
@@ -208,10 +198,11 @@ useEffect(() => {
     const newStatus = currentStatus === "Done" ? "In Progress" : "Done";
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:8080/api/tasks/${taskId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${token}`
                 },
         body: JSON.stringify({ status: newStatus })
       });
@@ -279,7 +270,7 @@ useEffect(() => {
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json",
-                       'Authorization': `Bearer ${token}`},
+                       'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
           ...newHabit,
           userId,
@@ -308,8 +299,7 @@ useEffect(() => {
   const handleDeleteTask = async (taskId) => {
     try {
       const res = await fetch(`http://localhost:8080/api/tasks/${taskId}`, {
-        method: "DELETE",
-        headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
+        method: "DELETE"
       });
       if (!res.ok) throw new Error("Failed to delete task");
       setTasks(tasks.filter(t => t.id !== taskId));
@@ -333,8 +323,7 @@ useEffect(() => {
   const handleDeleteHabit = async (habitId) => {
     try {
       const res = await fetch(`http://localhost:8080/api/habits/${habitId}`, {
-        method: "DELETE",
-        headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
+        method: "DELETE"
       });
       if (!res.ok) throw new Error("Failed to delete habit");
 
@@ -348,12 +337,9 @@ useEffect(() => {
   const handleUpdateHours = async (e) => {
   e.preventDefault();
   try {
-    const token = localStorage.getItem("token");
     const res = await fetch("http://localhost:8080/api/users/update-hours", {
       method: "PUT",
-      headers: { "Content-Type": "application/json" ,
-                  'Authorization': `Bearer ${token}`
-                },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, startHour, endHour })
     });
 

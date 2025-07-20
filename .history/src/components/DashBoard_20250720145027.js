@@ -208,10 +208,11 @@ useEffect(() => {
     const newStatus = currentStatus === "Done" ? "In Progress" : "Done";
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(`http://localhost:8080/api/tasks/${taskId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${token}`
                 },
         body: JSON.stringify({ status: newStatus })
       });
