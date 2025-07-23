@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -22,7 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-=======
+
+# Java backend
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -56,4 +56,8 @@ build/
 
 ### VS Code ###
 .vscode/
->>>>>>> 239d7516db653aea134e7d8946ef0ab687ceb6ca
+
+# Custom additions
+.history/
+*.pack
+frontend/node_modules/.cache/
