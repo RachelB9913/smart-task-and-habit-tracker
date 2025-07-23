@@ -51,7 +51,6 @@ A full-stack productivity app that lets users manage daily tasks and long-term h
 1. Open a new terminal in the `frontend/` directory
 2. Install dependencies:
    ```
-   cd frontend
    npm install
    ```
 
