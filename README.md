@@ -115,6 +115,32 @@ The app will be running at `http://localhost:3000/`.
 </table>
 
 
+### 📹 Demo Videos
+
+<table>
+   <tr>
+      <td align="center">
+         <a href="https://youtu.be/ja8erNnKRlE" target="_blank">
+            <img src="https://img.youtube.com/vi/ja8erNnKRlE/0.jpg" alt="Sign in and Register pages" width="200"/>
+         </a><br/>
+         <b>Sign in and Register pages</b>
+      </td>
+      <td align="center">
+         <a href="https://youtu.be/BTJcRD3O7Lo" target="_blank">
+            <img src="https://img.youtube.com/vi/BTJcRD3O7Lo/0.jpg" alt="Basic placement" width="200"/>
+         </a><br/>
+         <b>Basic placement</b>
+      </td>
+      <td align="center">
+         <a href="https://youtu.be/bHU-GVFrx1A" target="_blank">
+            <img src="https://img.youtube.com/vi/bHU-GVFrx1A/0.jpg" alt="Changing time limits" width="200"/>
+         </a><br/>
+         <b>Changing time limits</b>
+      </td>
+   </tr>
+</table>
+
+
 > More demo coming soon...
 
 ---
