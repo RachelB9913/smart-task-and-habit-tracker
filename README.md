@@ -90,14 +90,11 @@ The app will be running at `http://localhost:3000/`.
 
 ## 🖼️ Demo & Screenshots
 
+<img src="assets/HomePage.png" alt="Home Page" width="100%"/>
+
+<p align="center"><b>Home Page: Welcome screen with quick access to login, registration, and app features.</b></p>
+
 <table>
-   <tr>
-      <td align="center">
-         <img src="assets/HomePage.png" alt="HomePage" width="750"/><br/>
-         <b>HomePage</b><br/>
-         welcomes users and provides quick access to login, registration, and a summary of the app's features.
-      </td>
-   </tr>
    <tr>
       <td align="center">
          <img src="assets/login.png" alt="Login" width="250"/><br/>
