@@ -90,15 +90,14 @@ The app will be running at `http://localhost:3000/`.
 
 ## 🖼️ Demo & Screenshots
 
-
-
-### 🏠 Home Page
-
-The Home Page welcomes users and provides quick access to login, registration, and a summary of the app's features.
-
-![Home Page](assets/HomePage.png)
-
 <table>
+   <tr>
+      <td align="center">
+         <img src="assets/HomePage.png" alt="HomePage" width="750"/><br/>
+         <b>HomePage</b><br/>
+         welcomes users and provides quick access to login, registration, and a summary of the app's features.
+      </td>
+   </tr>
    <tr>
       <td align="center">
          <img src="assets/login.png" alt="Login" width="250"/><br/>
@@ -113,7 +112,7 @@ The Home Page welcomes users and provides quick access to login, registration, a
       <td align="center">
          <img src="assets/comments when registering.png" alt="Comments When Registering" width="250"/><br/>
          <b>Comments When Registering</b><br/>
-         Add comments during registration to personalize your experience.
+         comments explaining what to fix during registration.
       </td>
    </tr>
 </table>
