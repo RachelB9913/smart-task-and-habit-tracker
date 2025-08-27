@@ -42,7 +42,12 @@ export default function Register() {
         navigate('/login');
       } else if (res.status === 400) {
         const error = await res.json();
-        setValidationErrors(error);
+        // If backend returns { message, errors: { field: message } }
+        if (error.errors) {
+          setValidationErrors(error.errors);
+        } else {
+          setValidationErrors({ general: error.message || 'Registration failed' });
+        }
       } else {
         const error = await res.text();
         alert('Registration failed: ' + error);

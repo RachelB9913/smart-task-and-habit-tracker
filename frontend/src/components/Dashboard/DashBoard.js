@@ -437,43 +437,49 @@ useEffect(() => {
         {showTasks && (
           <div className="task-section">
             <button onClick={() => setShowTaskForm(!showTaskForm)} className="add-button">+</button>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="task-list">
-                {(provided) => (
-                  <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    {sortedTasks.map((task, index) => (
-                      <Draggable key={task.id} draggableId={String(task.id)} index={index}>
-                        {(provided) => (
-                          <li
-                            className="task-item"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <div className="task-content">
-                              <input
-                                type="checkbox"
-                                checked={task.status === "Done"}
-                                onChange={() => toggleTaskStatus(task.id, task.status)}
-                              />
-                              <div className={`task-details ${task.status === "Done" ? "task-done" : ""}`}>
-                                <strong>{task.title}</strong><br />
-                                {task.description} – {task.scheduledTime} – <em>{task.status}</em>
+            {sortedTasks.length > 0 ? (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="task-list">
+                  {(provided) => (
+                    <ul {...provided.droppableProps} ref={provided.innerRef}>
+                      {sortedTasks.map((task, index) => (
+                        <Draggable key={task.id} draggableId={String(task.id)} index={index}>
+                          {(provided) => (
+                            <li
+                              className="task-item"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <div className="task-content">
+                                <input
+                                  type="checkbox"
+                                  checked={task.status === "Done"}
+                                  onChange={() => toggleTaskStatus(task.id, task.status)}
+                                />
+                                <div className={`task-details ${task.status === "Done" ? "task-done" : ""}`}>
+                                  <strong>{task.title}</strong><br />
+                                  {task.description} – {task.scheduledTime} – <em>{task.status}</em>
+                                </div>
+                                <div className="task-actions">
+                                  <button className="edit-button" onClick={() => handleEditTask(task)}>🖊️</button>
+                                  <button className="delete-button" onClick={() => handleDeleteTask(task.id)}>🗑️</button>
+                                </div>
                               </div>
-                              <div className="task-actions">
-                                <button className="edit-button" onClick={() => handleEditTask(task)}>🖊️</button>
-                                <button className="delete-button" onClick={() => handleDeleteTask(task.id)}>🗑️</button>
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </ul>
-                )}
-              </Droppable>
-            </DragDropContext>
+                            </li>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            ) : (
+              <ul>
+                <li>No tasks yet</li>
+              </ul>
+            )}
           </div>
         )}
 

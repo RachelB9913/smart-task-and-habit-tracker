@@ -42,8 +42,9 @@ A full-stack productivity app that lets users manage daily tasks and long-term h
    ```
 
 4. Run the Spring Boot app:
-   ```
-   ./mvnw -f backend/pom.xml spring-boot:run
+   ```sh
+   cd backend
+   ../mvnw spring-boot:run
    ```
 
 ### 💻 Frontend (React)
