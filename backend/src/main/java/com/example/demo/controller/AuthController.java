@@ -5,8 +5,7 @@ import com.example.demo.config.JwtService;
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
-// import com.example.demo.security.JwtService;
+import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
 
@@ -14,48 +13,54 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserService userService;
 
-    @Autowired
-    private JwtService jwtService;
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtService jwtService,
+                          UserService userService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        System.out.println("Register request received");
-        if (userRepository.findByUsername(request.getUsername()) != null) {
-            return ResponseEntity.badRequest().body("Username already taken");
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+        public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
+        if (userService.existsByUsername(req.getUsername())) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "message", "Validation failed",
+                "errors", Map.of("username", "Username already exists")
+            ));
+        }
+        if (userService.existsByEmail(req.getEmail())) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "message", "Validation failed",
+                "errors", Map.of("email", "Email already registered")
+            ));
         }
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setStartHour(request.getStartHour());
-        user.setEndHour(request.getEndHour());
+        User user = userService.createUser(req.getUsername(), req.getEmail(), req.getPassword(),
+                                           req.getStartHour(), req.getEndHour());
 
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok(Map.of(
+            "id", user.getId(),
+            "username", user.getUsername(),
+            "email", user.getEmail()
+        ));
     }
 
     // @PostMapping("/login")
@@ -89,9 +94,10 @@ public class AuthController {
         }
 
         // Load user
-        Optional<User> userOpt = userRepository.findByEmail(loginData.getUsername());
+        Optional<User> userOpt = userService.findByEmail(loginData.getUsername());
         if (userOpt.isEmpty()) {
-            userOpt = userRepository.findByUsername(loginData.getUsername());
+            User userByUsername = userService.findByUsername(loginData.getUsername());
+            userOpt = userByUsername != null ? Optional.of(userByUsername) : Optional.empty();
         }
         User user = userOpt.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
