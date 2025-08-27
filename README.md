@@ -90,7 +90,36 @@ The app will be running at `http://localhost:3000/`.
 
 ## 🖼️ Demo & Screenshots
 
-> Demo coming soon...
+
+
+### 🏠 Home Page
+
+The Home Page welcomes users and provides quick access to login, registration, and a summary of the app's features.
+
+![Home Page](assets/HomePage.png)
+
+<table>
+   <tr>
+      <td align="center">
+         <img src="assets/login.png" alt="Login" width="250"/><br/>
+         <b>Login</b><br/>
+         Securely sign in to access your personalized planner.
+      </td>
+      <td align="center">
+         <img src="assets/register.png" alt="Register" width="250"/><br/>
+         <b>Register</b><br/>
+         Create a new account and set your planner hours.
+      </td>
+      <td align="center">
+         <img src="assets/comments when registering.png" alt="Comments When Registering" width="250"/><br/>
+         <b>Comments When Registering</b><br/>
+         Add comments during registration to personalize your experience.
+      </td>
+   </tr>
+</table>
+
+
+> More demo coming soon...
 
 ---
 
